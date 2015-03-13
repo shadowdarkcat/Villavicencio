@@ -1,0 +1,53 @@
+div.exception {
+    width: 600px
+}
+
+div.exception fieldset{
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+
+div.exception legend {
+    color: #304A78;
+    font-weight:bold;
+    margin:5px 0 0 15px;
+    font-size:15px;
+
+}
+
+div.exception legend span.right {
+    color: #F00;
+    font-size:10px;
+    margin-left: 10px
+}
+div.exception legend span.left {
+    color: #F00;
+    font-size:10px;
+    margin-right: 10px
+}
+
+div.exception fieldset div.mensaje {
+    color: #000;
+    font-size:11px;
+}
+
+div.exception fieldset div.cause {
+    color: #F00;
+    font-size:12px;
+}
+
+div.exception fieldset div.detailException {
+    color: #000;
+    font-size:10px;
+}
+
+div.exception fieldset td.botones {
+    text-align: center;
+    padding-top: 15px;
+    padding-bottom: 5px;
+}
+
+div.exception fieldset div.detailExceptionDiv {
+    display: none;
+}

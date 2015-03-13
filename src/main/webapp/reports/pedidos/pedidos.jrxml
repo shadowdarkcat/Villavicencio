@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.0.0.final using JasperReports Library version 6.0.0  -->
+<!-- 2015-03-05T20:39:11 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="pedidos" pageWidth="892" pageHeight="842" columnWidth="852" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7b3016c8-cf28-4c02-8a3f-17b05c84183d">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<parameter name="PATH_IMAGENES" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[]]>
+	</queryString>
+	<field name="statusAlmacen" class="java.lang.Character">
+		<fieldDescription><![CDATA[statusAlmacen]]></fieldDescription>
+	</field>
+	<field name="idPedido" class="java.lang.Integer">
+		<fieldDescription><![CDATA[idPedido]]></fieldDescription>
+	</field>
+	<field name="strFecha" class="java.lang.String">
+		<fieldDescription><![CDATA[strFecha]]></fieldDescription>
+	</field>
+	<field name="vendedor" class="mx.com.villavicencio.system.vendedor.dto.DtoVendedor">
+		<fieldDescription><![CDATA[vendedor]]></fieldDescription>
+	</field>
+	<field name="fecha" class="java.util.Date">
+		<fieldDescription><![CDATA[fecha]]></fieldDescription>
+	</field>
+	<field name="cliente" class="mx.com.villavicencio.system.cliente.dto.DtoCliente">
+		<fieldDescription><![CDATA[cliente]]></fieldDescription>
+	</field>
+	<field name="folio" class="java.lang.String">
+		<fieldDescription><![CDATA[folio]]></fieldDescription>
+	</field>
+	<field name="detalles" class="java.util.Collection">
+		<fieldDescription><![CDATA[detalles]]></fieldDescription>
+	</field>
+	<field name="nombreVendedor" class="java.lang.String">
+		<fieldDescription><![CDATA[nombreVendedor]]></fieldDescription>
+	</field>
+	<columnHeader>
+		<band height="175" splitType="Stretch">
+			<image>
+				<reportElement x="0" y="0" width="80" height="79" uuid="cb81772a-5a67-43e9-aaf9-f51416e35c1a"/>
+				<imageExpression><![CDATA[$P{PATH_IMAGENES} + "logo.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="0" y="0" width="849" height="30" uuid="c5565894-da26-40e5-bdc0-6edae460aa15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[REPORTE DE PEDIDO(S)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="580" y="30" width="80" height="20" uuid="c6df9446-b53e-4df0-a252-5923bcac1616"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle"/>
+				<text><![CDATA[No Pedido:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="660" y="30" width="190" height="20" uuid="93207fbb-ea26-4260-9c4d-699382018bd6"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{idPedido}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="71" y="95" width="778" height="20" uuid="7ccb2bb6-e396-4bdf-aba9-ede99842aab2"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="95" width="70" height="20" uuid="b82af177-431a-4327-b53d-ba79c0a5a3da"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle"/>
+				<text><![CDATA[FECHA:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="115" width="70" height="20" uuid="612f5c84-539b-4841-be74-cebe34bc89df"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle"/>
+				<text><![CDATA[FOLIO:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="72" y="115" width="777" height="20" uuid="e41d608c-df64-43a8-aade-09dd683caba8"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{folio}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="135" width="70" height="20" uuid="17cc2eb0-8f2b-47b0-a713-4828e628018c"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle"/>
+				<text><![CDATA[VENDEDOR:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="71" y="135" width="778" height="20" uuid="6d12bb12-80f4-4127-afa4-f1a1861a7d8e"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{nombreVendedor}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="155" width="70" height="20" uuid="ff68dee5-c769-4efa-b68d-932e8b18b2f4"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle"/>
+				<text><![CDATA[CLIENTE:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="72" y="155" width="777" height="20" uuid="065a7d9f-8059-41d6-900b-a5b571366873"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{cliente} != null && $F{cliente}.getNombre() != null 
+	? $F{cliente}.getEmpresa() + " " + $F{cliente}.getRazonSocial()
+	: $F{nombreVendedor}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="580" y="50" width="80" height="20" uuid="07bcbf37-2507-4931-bb5d-122a4c8863e6"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle"/>
+				<text><![CDATA[Estado Pedido:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="660" y="50" width="190" height="20" uuid="49d00f02-5481-4bf4-b985-8e9485446870"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{statusAlmacen}.toString($F{statusAlmacen}).equals("P")
+	? "PENDIENTE"
+	: (
+		$F{statusAlmacen}.toString($F{statusAlmacen}).equals("S")
+		? "SURTIENDO"
+		: (
+			$F{statusAlmacen}.toString($F{statusAlmacen}).equals("E")
+			? "ENTREGADO"
+			: (
+				$F{statusAlmacen}.toString($F{statusAlmacen}).equals("C")
+				? "CANCELADO"
+				: ""
+			)
+		)
+	)]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="393" splitType="Stretch">
+			<subreport>
+				<reportElement x="0" y="0" width="849" height="393" uuid="28ad0410-f488-4de3-82ac-c09db359b088"/>
+				<dataSourceExpression><![CDATA[ new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{detalles})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "productos.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="750" y="0" width="35" height="20" uuid="74320fbb-aa3b-4d6c-9961-07ba730b4a44"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Pagina]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="785" y="0" width="25" height="20" uuid="823110c6-4132-40ac-86e2-1825b06d6ca0"/>
+				<textElement textAlignment="Center">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="810" y="0" width="15" height="20" uuid="da4bcb98-cfbf-4340-8ec9-2b75ab66b6ff"/>
+				<textElement textAlignment="Center">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[de]]></text>
+			</staticText>
+			<textField evaluationTime="Report">
+				<reportElement x="825" y="0" width="25" height="20" uuid="a83cddc7-b7ce-46e4-a2a6-c9b3fe9aa6ef"/>
+				<textElement textAlignment="Center">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

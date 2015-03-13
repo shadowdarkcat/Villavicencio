@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.0.0.final using JasperReports Library version 6.0.0  -->
+<!-- 2015-03-04T18:10:44 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="establecidos" pageWidth="890" pageHeight="792" whenNoDataType="NoDataSection" columnWidth="850" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c106478d-46bd-4f4a-b4cb-27b8dea86f7f">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="PRODUCTO" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[]]>
+	</queryString>
+	<field name="peso" class="java.lang.String">
+		<fieldDescription><![CDATA[peso]]></fieldDescription>
+	</field>
+	<field name="idProducto" class="java.lang.Integer">
+		<fieldDescription><![CDATA[idProducto]]></fieldDescription>
+	</field>
+	<field name="costoUnitario" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[costoUnitario]]></fieldDescription>
+	</field>
+	<field name="claveProducto" class="java.lang.String">
+		<fieldDescription><![CDATA[claveProducto]]></fieldDescription>
+	</field>
+	<field name="nombreProducto" class="java.lang.String">
+		<fieldDescription><![CDATA[nombreProducto]]></fieldDescription>
+	</field>
+	<field name="comision" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[comision]]></fieldDescription>
+	</field>
+	<pageHeader>
+		<band height="20">
+			<textField>
+				<reportElement x="-2" y="0" width="851" height="20" uuid="0855f00c-2b5e-402a-b73a-ee87a7d79583"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{PRODUCTO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<line>
+				<reportElement x="170" y="0" width="487" height="1" uuid="143f9fbc-c691-4c3b-af78-fabab8ac9fbd"/>
+			</line>
+			<line>
+				<reportElement x="170" y="18" width="487" height="2" uuid="7bdf8a14-73a3-4aea-be95-b090105e87f6"/>
+			</line>
+			<staticText>
+				<reportElement x="170" y="0" width="60" height="19" uuid="f2e240f6-d35a-4f08-b5ef-cfaaa6869b57"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[No Producto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="230" y="0" width="100" height="19" uuid="155e58dd-0258-4919-8889-2db6320e89b8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Clave Producto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="330" y="0" width="140" height="19" uuid="c0ba3e86-2fda-40ff-8ec6-110c17b8875a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Nombre Producto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="522" y="0" width="67" height="19" uuid="50f866b5-9492-46e1-8fef-eea25d14f8cc"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Costo Unitario]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="471" y="0" width="50" height="19" uuid="1616d009-102a-491a-993b-93b0f436c06b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Peso]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="590" y="0" width="67" height="19" uuid="bc433c32-2e11-4428-b56d-1639b83cfda8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Comisión]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="26" splitType="Stretch">
+			<rectangle>
+				<reportElement x="170" y="0" width="487" height="26" backcolor="#66CCFF" uuid="3d5ea652-2676-470b-8a2f-b3b6946fa291">
+					<printWhenExpression><![CDATA[$V{PAGE_COUNT} % 2 == 0]]></printWhenExpression>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="1.0" lineColor="#CCCCCC"/>
+				</graphicElement>
+			</rectangle>
+			<textField>
+				<reportElement x="170" y="0" width="60" height="26" uuid="ffbba74d-13b1-4c7f-bf8b-c5603df51b59"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{idProducto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="230" y="0" width="100" height="26" uuid="8813ed5f-2cea-448c-a259-627d76481995"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{claveProducto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="330" y="0" width="140" height="26" uuid="aa8c3831-f271-418a-87ac-33c0f3ec99b2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{nombreProducto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="470" y="0" width="50" height="26" uuid="192d0ac7-4ec2-45c7-a57e-5e0ae600b94b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{peso}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="520" y="0" width="68" height="25" uuid="9a690a85-6238-407f-ad5a-33b493318ab9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{costoUnitario}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="590" y="0" width="67" height="25" uuid="0a81da2f-3eeb-444d-9c5c-e18cfc80cedf"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{comision} != null
+    ? $F{comision}
+    : "0.00"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<noData>
+		<band height="313">
+			<staticText>
+				<reportElement x="-2" y="147" width="850" height="18" uuid="eca27757-e472-4e33-9018-101bf0f8819c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[No hay productos que mostrar]]></text>
+			</staticText>
+		</band>
+	</noData>
+</jasperReport>

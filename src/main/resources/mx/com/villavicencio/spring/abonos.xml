@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+       ">
+    
+    <bean id="abonosService" class="mx.com.villavicencio.system.movimientos.abonos.bo.impl.AbonosBoImpl">
+        <property name="abonosDao" ref="abonosDao" />
+        <property name="clienteBo" ref="clienteService" />
+        <property name="datosPedidoBo" ref="datosPedidoService" />
+        <property name="movimientosBo" ref="movimientosService" />
+        <property name="notaVentaBo" ref="notaVentaService" />
+        <property name="pedidoBo" ref="pedidoService" />
+        <property name="vendedorBo" ref="vendedoresService" />
+        <property name="cargosBo" ref="cargosService" />
+        <property name="devolucionesBo" ref="devolucionesService" />
+    </bean>
+    
+    <bean id="abonosDao" class="mx.com.villavicencio.system.movimientos.abonos.dao.impl.AbonosDaoImpl">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+</beans>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.0.0.final using JasperReports Library version 6.0.0  -->
+<!-- 2015-03-05T12:26:28 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="vendedor" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b7428c2e-c592-4dc3-9508-5c50b8f0c066">
+	<parameter name="VENDEDOR" class="mx.com.villavicencio.system.vendedor.dto.DtoVendedor"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="50" height="20" uuid="cbf9b330-bedc-4576-bc4d-37cc9e960df8"/>
+				<text><![CDATA[Vendedor:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="50" y="0" width="230" height="20" uuid="eaefd6f4-7021-4ad6-9067-e72f1a81c1b8"/>
+				<textFieldExpression><![CDATA[$P{VENDEDOR}.getNombre().equals("VILLAVICENCIO")
+	? $P{VENDEDOR}.getNombre()
+	: $P{VENDEDOR}.getNombre() + " " + $P{VENDEDOR}.getApellidoPaterno() + " " + $P{VENDEDOR}.getApellidoMaterno()]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+</jasperReport>

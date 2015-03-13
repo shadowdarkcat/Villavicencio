@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+       ">
+
+    <bean id="clienteService" class="mx.com.villavicencio.system.cliente.bo.impl.ClienteBoImpl">
+        <property name="clienteDao" ref="clienteDao" />
+        <property name="creditoBo" ref="creditosService" />
+        <property name="datosCreditoBo" ref="datosCreditoService" />
+        <property name="productoBo" ref="productoService" />        
+        <property name="datosBo" ref="datosService" />
+        <property name="vendedorBo" ref="vendedoresService" />
+    </bean>
+    
+    <bean id="clienteDao" class="mx.com.villavicencio.system.cliente.dao.impl.ClienteDaoImpl">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+</beans>

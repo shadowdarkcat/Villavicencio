@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+       ">
+    <import resource="mx/com/villavicencio/spring/datasource.xml" />
+    <import resource="mx/com/villavicencio/spring/usuarios.xml" />
+    <import resource="mx/com/villavicencio/spring/menu.xml" />
+    <import resource="mx/com/villavicencio/spring/producto.xml" />
+    <import resource="mx/com/villavicencio/spring/vendedor.xml" />
+    <import resource="mx/com/villavicencio/spring/creditos.xml" />
+    <import resource="mx/com/villavicencio/spring/datos.xml" />
+    <import resource="mx/com/villavicencio/spring/datosCredito.xml" />
+    <import resource="mx/com/villavicencio/spring/cliente.xml" />
+    <import resource="mx/com/villavicencio/spring/puestos.xml" />
+    <import resource="mx/com/villavicencio/spring/pedidos.xml" />
+    <import resource="mx/com/villavicencio/spring/datosPedido.xml" />
+    <import resource="mx/com/villavicencio/spring/detallePedido.xml" />
+    <import resource="mx/com/villavicencio/spring/abonos.xml" />
+    <import resource="mx/com/villavicencio/spring/movimientos.xml" />
+    <import resource="mx/com/villavicencio/spring/notaVenta.xml" />
+    <import resource="mx/com/villavicencio/spring/cargos.xml" />
+    <import resource="mx/com/villavicencio/spring/inventario.xml" />
+    <import resource="mx/com/villavicencio/spring/devoluciones.xml" />
+    <import resource="mx/com/villavicencio/spring/detalleDevoluciones.xml" />
+    <import resource="mx/com/villavicencio/spring/bancos.xml" />
+    <import resource="mx/com/villavicencio/spring/detalleNotaVenta.xml" />
+    <import resource="mx/com/villavicencio/spring/detalleLiquidacion.xml" />
+    <import resource="mx/com/villavicencio/spring/liquidacion.xml" />
+</beans>

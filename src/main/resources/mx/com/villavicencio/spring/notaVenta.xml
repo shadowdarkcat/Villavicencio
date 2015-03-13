@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+       ">
+
+    <bean id="notaVentaService" class="mx.com.villavicencio.system.venta.nota.bo.impl.NotaVentaBoImpl" >
+        <property name="notaVentaDao" ref="notaVentaDao" />
+        <property name="abonosBo" ref="abonosService" />
+        <property name="cargosBo" ref="cargosService" />
+        <property name="creditoBo" ref="creditosService" />
+        <property name="devolucionesBo" ref="devolucionesService" />
+        <property name="movimientosBo" ref="movimientosService" />
+        <property name="pedidoBo" ref="pedidoService" />
+        <property name="bancosBo" ref="bancosService" />
+        <property name="datosPedidoBo" ref="datosPedidoService" />
+        <property name="datosCreditoBo" ref="datosCreditoService" />
+        <property name="detalleNotaVentaBo" ref="detalleNotaVentaService" />
+    </bean>
+    <bean id="notaVentaDao" class="mx.com.villavicencio.system.venta.nota.dao.impl.NotaVentaDaoImpl">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+</beans>
