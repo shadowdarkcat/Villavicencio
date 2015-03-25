@@ -31,6 +31,7 @@ import mx.com.villavicencio.system.venta.devoluciones.devoluciones.bo.Devolucion
 import mx.com.villavicencio.system.venta.nota.bo.NotaVentaBo;
 import mx.com.villavicencio.system.venta.nota.dao.NotaVentaDao;
 import mx.com.villavicencio.system.venta.nota.dto.DtoNotaVenta;
+import mx.com.villavicencio.utils.TablesUtils;
 
 /**
  *
@@ -63,8 +64,7 @@ public class NotaVentaBoImpl implements NotaVentaBo {
     @Override
     public Collection<DtoNotaVenta> findAll(DtoUsuario user) {
         if ((user != null) && (user.getIdUsuario() != 0)) {
-            ApplicationMessages.errorMessage(PropertiesBean.getErrorFile().getProperty(Property.NO_DESARROLLADO));
-            throw new ApplicationException(PropertiesBean.getErrorFile().getProperty(Property.NO_DESARROLLADO));
+            return this.notaVentaDao.findAll();
         } else {
             ApplicationMessages.errorMessage(PropertiesBean.getErrorFile().getProperty(Property.ACCESO_DENEGADO));
             throw new ApplicationException(PropertiesBean.getErrorFile().getProperty(Property.ACCESO_DENEGADO));
@@ -95,6 +95,9 @@ public class NotaVentaBoImpl implements NotaVentaBo {
                 movimientos.setCredito(CreditoFactory.newInstance(findDatosCreditoById));
                 movimientos.setCredito(creditoBo.findById(user, movimientos.getCredito()));
                 object.setMovimiento(movimientos);
+                TablesUtils.setCreditoBo(creditoBo);
+                TablesUtils.setUser(user);
+                TablesUtils.setNotaVentaBo(this);
             }
             for (DtoMovimientos movs : movimientosBo.findAll(user, movimientos)) {
                 movs.setCargos(cargosBo.findById(user, movs.getCargos()));
@@ -105,6 +108,7 @@ public class NotaVentaBoImpl implements NotaVentaBo {
                 collection.add(movs);
             }
             object.setMovimientos(collection);
+            TablesUtils.setDetalleNotaVentaBo(detalleNotaVentaBo);
             return object;
         } else {
             ApplicationMessages.errorMessage(PropertiesBean.getErrorFile().getProperty(Property.ACCESO_DENEGADO));

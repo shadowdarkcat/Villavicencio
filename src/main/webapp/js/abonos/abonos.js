@@ -131,7 +131,7 @@ $(document).ready(function () {
     if ($('#divAltaAbonos').length > 0) {
         $('#divAltaAbonos').dialog({
             resizable: false
-            , width: 950
+            , width: 1130
             , height: 900
             , modal: true
             , cache: false
@@ -417,6 +417,20 @@ function registrarAbono(idNotaVenta) {
             $('#lblLimiteCredito').priceFormat({
                 prefix: '$ '
             });
+            var dispo = parseFloat($('#frmRegistroAbono').find('#lblCreditoUsado').text());
+            if (dispo < 0) {
+                $('#frmRegistroAbono').find('#lblNegativo').empty();
+                $('#frmRegistroAbono').find('#lblNegativo').text('CREDITO SALDO DEUDOR :');
+                $('#lblCreditoUsado').priceFormat({
+                    prefix: '$ - '
+                });
+                $('#frmRegistroAbono').find('#lblCreditoUsado').css('color','red');
+            } else {
+                $('#lblCreditoUsado').priceFormat({
+                    prefix: '$ '
+                });
+            }
+
             $('#tblDetalleAbono').DataTable({
                 language: {
                     url: contextoGlobal + '/resource/es_ES.json'

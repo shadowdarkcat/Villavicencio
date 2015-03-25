@@ -10,7 +10,7 @@ function minuscula(campo) {
     });
 }
 
-function formato_numero(numero, decimales, separador_decimal, separador_miles, Simbolo) { 
+function formato_numero(numero, decimales, separador_decimal, separador_miles, Simbolo) {
     numero = parseFloat(numero);
     if (isNaN(numero)) {
         return "";
@@ -27,3 +27,9 @@ function formato_numero(numero, decimales, separador_decimal, separador_miles, S
     }
     return Simbolo + numero;
 }
+
+$('.solo-numero').keyup(function () {
+    this.value = (this.value + '').replace(/[^0-9]/g, '');
+});
+
+$.datepicker.setDefaults($.datepicker.regional['es-MX']);

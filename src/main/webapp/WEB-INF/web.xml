@@ -58,6 +58,10 @@
         <servlet-name>LiquidacionController</servlet-name>
         <servlet-class>mx.com.villavicencio.system.liquidacion.liquidacion.controller.LiquidacionController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CreditoController</servlet-name>
+        <servlet-class>mx.com.villavicencio.system.credito.credito.controller.CreditoController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ProductoController</servlet-name>
         <url-pattern>/controller/productoController</url-pattern>
@@ -89,6 +93,10 @@
     <servlet-mapping>
         <servlet-name>LiquidacionController</servlet-name>
         <url-pattern>/controller/liquidacionController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CreditoController</servlet-name>
+        <url-pattern>/controller/creditoController</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

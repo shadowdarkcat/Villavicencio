@@ -56,6 +56,7 @@ public class Variables {
 
     public static final String PDF = "PDF";
     public static final String EXCEL = "XLS";
-    
+
     public static final String BANCOS = "bancos";
+    public static final String APLICADO = "A";
 }

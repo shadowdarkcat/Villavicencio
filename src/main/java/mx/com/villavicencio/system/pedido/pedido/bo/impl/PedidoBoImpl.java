@@ -117,7 +117,9 @@ public class PedidoBoImpl implements PedidoBo {
                 detalle.setComision(NumberUtils.convertPorcentajeToNumber(detalle.getComision()));
                 collection.add(this.detalleBo.findById(user, detalle));
                 if ((detalles.getIdCliente() != null) && (detalles.getIdCliente() != 0)) {
-                    object.getCliente().setIdCliente(detalles.getIdCliente());
+                    if (object.getCliente() == null) {                        
+                        object.setCliente(ClienteFactory.newInstance(detalles.getIdCliente()));
+                    }
                     object.setCliente(this.clienteBo.findById(user, object.getCliente()));
                 } else if ((detalles.getIdVendedor() != null) && (detalles.getIdVendedor() != 0)) {
                     object.getVendedor().setIdVendedor(detalles.getIdVendedor());

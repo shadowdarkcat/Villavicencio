@@ -30,10 +30,6 @@ $(document).ready(function () {
         };
     });
 
-    $('.solo-numero').keyup(function () {
-        this.value = (this.value + '').replace(/[^0-9]/g, '');
-    });
-
     if ($('#divTipoReportePedido').length > 0) {
         $('#divTipoReportePedido').dialog({
             resizable: false

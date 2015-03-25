@@ -140,6 +140,11 @@ public class AbonosBoImpl implements AbonosBo {
                             collection.add(movs);
                             idAnteriorVenta = notaVenta.getIdNotaVenta();
                         }
+                        
+                        if ((movs.getAbonos() != null) && (movs.getAbonos().getIdAbonos() != null)) {
+                            movs.setAbonos(findById(user, movs.getAbonos()));
+                            collection.add(movs);
+                        }
                     }
                     if (notaVenta.getIdNotaVenta() == null) {
                         movimientos.setNotaVenta(NotaVentaFactory.newInstance());
@@ -147,8 +152,8 @@ public class AbonosBoImpl implements AbonosBo {
                         movimientos.setCargos(CargosFactory.newInstance());
                         movimientos.setPedido(pedido);
                         collection.add(movimientos);
-                        idAnteriorPedido = pedido.getIdPedido();
                     }
+                    idAnteriorPedido = pedido.getIdPedido();
                 }
             }
             object.setMovimientos(collection);

@@ -3,6 +3,7 @@ package mx.com.villavicencio.system.venta.nota.dao.impl;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.Collection;
 import mx.com.villavicencio.commons.exception.ApplicationException;
 import mx.com.villavicencio.commons.jdbc.Jdbc;
@@ -49,8 +50,16 @@ public class NotaVentaDaoImpl extends JdbcDaoSupport implements NotaVentaDao {
 
     @Override
     public Collection<DtoNotaVenta> findAll() {
-        ApplicationMessages.errorMessage(PropertiesBean.getErrorFile().getProperty(Property.NO_DESARROLLADO) + "\n" + NotaVentaDaoImpl.class.getSimpleName());
-        throw new ApplicationException(PropertiesBean.getErrorFile().getProperty(Property.NO_DESARROLLADO) + "\n" + NotaVentaDaoImpl.class.getSimpleName());
+        try {
+            return getJdbcTemplate().query(View.VIEW_NOTAS_VENTA, new NotaVentaRowMapper());
+        } catch (IncorrectResultSizeDataAccessException ex) {
+            return new ArrayList<>();
+        } catch (DataAccessException ex) {
+            ApplicationMessages.errorMessage(PropertiesBean.getErrorFile().getProperty(Property.ERROR_FIND)
+                    + "\n" + NotaVentaDaoImpl.class.getSimpleName(), ex);
+            throw new ApplicationException(PropertiesBean.getErrorFile().getProperty(Property.ERROR_FIND)
+                    + "\n" + NotaVentaDaoImpl.class.getSimpleName());
+        }
     }
 
     @Override

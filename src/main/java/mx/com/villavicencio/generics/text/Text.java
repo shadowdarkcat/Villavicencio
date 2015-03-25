@@ -163,4 +163,9 @@ public class Text {
 
     public static final String STATUS_NOTA_VENTA = "statusNotaVenta";
     public static final String RDB_CREDITOM = "rdbCreditoM";
+    
+    public static final String TIPO_CREDITO = "txtTipoCredito";
+    public static final String FECHA_REGISTRO = "txtFechaRegistro";
+    
+    public static final String FECHA_PAGO = "txtFechaPago";
 }

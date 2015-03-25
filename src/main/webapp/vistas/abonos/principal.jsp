@@ -9,7 +9,8 @@
     <body>          
         <c:choose>
             <c:when test="${id == 0}">
-                <jsp:include page="alta/alta.jsp" />                    
+                <jsp:include page="alta/alta.jsp" />        
+                <jsp:include page="../credito/alta/alta.jsp" />
             </c:when>           
         </c:choose>
     </body>

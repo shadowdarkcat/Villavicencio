@@ -61,6 +61,8 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/pedidos/cambioPedido.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/abonos/abonos.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/liquidacion/liquidacion.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/credito/credito.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/resource/es-MX.js"></script>
 
 
 
