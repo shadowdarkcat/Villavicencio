@@ -11,8 +11,12 @@ import mx.com.villavicencio.system.cliente.dto.DtoCliente;
 import mx.com.villavicencio.system.credito.credito.bo.CreditoBo;
 import mx.com.villavicencio.system.credito.credito.dto.DtoCredito;
 import mx.com.villavicencio.system.credito.credito.factory.CreditoFactory;
+import mx.com.villavicencio.system.movimientos.abonos.bo.AbonosBo;
 import mx.com.villavicencio.system.movimientos.abonos.dto.DtoAbonos;
+import mx.com.villavicencio.system.movimientos.abonos.factory.AbonosFactory;
+import mx.com.villavicencio.system.movimientos.movimientos.bo.MovimientosBo;
 import mx.com.villavicencio.system.movimientos.movimientos.dto.DtoMovimientos;
+import mx.com.villavicencio.system.movimientos.movimientos.factory.MovimientosFactory;
 import mx.com.villavicencio.system.productos.productos.dto.DtoProducto;
 import mx.com.villavicencio.system.usuario.dto.DtoUsuario;
 import mx.com.villavicencio.system.vendedor.dto.DtoVendedor;
@@ -34,6 +38,8 @@ public class TablesUtils {
     private static DtoUsuario user;
     private static NotaVentaBo notaVentaBo;
     private static DetalleNotaVentaBo detalleNotaVentaBo;
+    private static MovimientosBo movimientosBo;
+    private static AbonosBo abonosBo;
 
     public static String createTableProducto(Collection<DtoProducto> producto) {
         StringBuilder table = new StringBuilder();
@@ -305,154 +311,6 @@ public class TablesUtils {
 
     public static String createTableAltaAbonos(DtoNotaVenta notaVenta, String context, String action) {
         StringBuilder sb = new StringBuilder();
-        BigDecimal cargo = BigDecimal.ZERO;
-        BigDecimal cargoAnterior = BigDecimal.ZERO;
-        BigDecimal cargoDevolucion = BigDecimal.ZERO;
-        BigDecimal credito = BigDecimal.ZERO;
-        BigDecimal creditoActual = BigDecimal.ZERO;
-        BigDecimal abonoCredito = BigDecimal.ZERO;
-        String tipoCredito = null;
-        String statusCredito = null;
-        String fechaRegistro = "";
-        String fechaLimite = "";
-        Integer idCredito = null;
-        String noNota = null;
-        Integer index = 0;
-        Integer idNotaVentaAnterior = 0;
-        DtoCredito cred = null;
-        for (DtoMovimientos movs : notaVenta.getMovimientos()) {
-            cargo = movs.getCargos().getCargo();
-            cargoAnterior = (movs.getCargos().getCargoAnterior() == null ? BigDecimal.ZERO : movs.getCargos().getCargoAnterior());
-            if (!Objects.equals(idNotaVentaAnterior, movs.getNotaVenta().getIdNotaVenta())) {
-                for (DtoDetalleDevoluciones devoluciones : movs.getDevoluciones().getDetalles()) {
-                    cargoDevolucion = cargoDevolucion.add(devoluciones.getSubtotal());
-                }
-            }
-            if (!StringUtils.isReallyEmptyOrNull(movs.getCredito().getTipoCredito())) {
-                tipoCredito = movs.getCredito().getTipoCredito();
-                if (tipoCredito.equals(Variables.PLAZO.toUpperCase())) {
-                    credito = movs.getCredito().getCantidadMonetaria();
-                    if (movs.getCredito().getFechaPago() != null) {
-                        fechaLimite = DateUtils.dateToString(movs.getCredito().getFechaPago());
-                    }
-                } else if (tipoCredito.equals(Variables.MONETARIO.toUpperCase())) {
-                    credito = movs.getCredito().getCantidadMonetaria();
-                } else if (tipoCredito.equals(Variables.CONTRA_NOTA.toUpperCase())) {
-                    noNota = movs.getCredito().getFolioNota();
-                }
-                if (!StringUtils.isReallyEmptyOrNull(movs.getCredito().getEstatusCredito())) {
-                    statusCredito = movs.getCredito().getEstatusCredito();
-                    if (movs.getCredito().getEstatusCredito() == "A") {
-                        statusCredito = "VIGENTE";
-                    } else if (movs.getCredito().getEstatusCredito() == "V") {
-                        statusCredito = "VENCIDO";
-                    }
-                } else {
-                    statusCredito = "SIN APLICAR";
-                }
-                if (movs.getCredito().getFechaPago() != null) {
-                    fechaRegistro = DateUtils.dateToString(movs.getCredito().getFechaRegistro());
-                } else {
-                    fechaRegistro = "SIN APLICAR";
-                }
-                idCredito = movs.getCredito().getIdCredito();
-            }
-
-            DtoAbonos abono = movs.getAbonos();
-            if (abono.getIdAbonos() != null) {
-                abonoCredito = abonoCredito.add(movs.getAbonos().getAbono());
-            }
-            index++;
-            idNotaVentaAnterior = movs.getNotaVenta().getIdNotaVenta();
-            if (movs.getCredito() != null) {
-                if (movs.getCredito().getIdCredito() != null) {
-                    cred = CreditoFactory.newInstance(movs.getCredito().getIdCredito());
-                }
-            }
-        }
-
-        if (!StringUtils.isReallyEmptyOrNull(notaVenta.getMovimiento().getCredito().getTipoCredito())) {
-            tipoCredito = notaVenta.getMovimiento().getCredito().getTipoCredito();
-            if (tipoCredito.equals(Variables.PLAZO.toUpperCase())) {
-                credito = notaVenta.getMovimiento().getCredito().getCantidadMonetaria();
-                if (notaVenta.getMovimiento().getCredito().getFechaPago() != null) {
-                    fechaLimite = DateUtils.dateToString(notaVenta.getMovimiento().getCredito().getFechaPago());
-                    noNota = notaVenta.getMovimiento().getCredito().getFolioNota();
-                }
-            } else if (tipoCredito.equals(Variables.MONETARIO.toUpperCase())) {
-                credito = notaVenta.getMovimiento().getCredito().getCantidadMonetaria();
-            } else if (tipoCredito.equals(Variables.CONTRA_NOTA.toUpperCase())) {
-                noNota = notaVenta.getMovimiento().getCredito().getFolioNota();
-            }
-            if (!StringUtils.isReallyEmptyOrNull(notaVenta.getMovimiento().getCredito().getEstatusCredito())) {
-                statusCredito = notaVenta.getMovimiento().getCredito().getEstatusCredito();
-                if (abonoCredito.compareTo(BigDecimal.ZERO) == 0) {
-                    cred = creditoBo.findById(user, cred);
-                    if (cred.getFolioNota().contains(",")) {
-                        BigDecimal cargoCredito = BigDecimal.ZERO;
-                        for (DtoNotaVenta notas : notaVentaBo.findAll(user)) {
-                            notas.setDetalles(detalleNotaVentaBo.findAll(user, DetalleNotaVentaFactory.newInstance(notas.getIdNotaVenta())));
-                            for (String str : StringUtils.split(cred.getFolioNota())) {
-                                if (notas.getFolio().equals(str)) {
-                                    for (DtoDetalleNotaVenta detalles : notas.getDetalles()) {
-                                        cargoCredito = cargoCredito.add(detalles.getSubTotal());
-                                    }
-                                    for (DtoMovimientos movs : notaVenta.getMovimientos()) {
-                                        DtoAbonos abono = movs.getAbonos();
-                                        abonoCredito = abonoCredito.add(abono.getAbonoAnterior());
-                                    }
-                                }
-                            }
-                        }
-                        creditoActual = credito.subtract(cargoCredito);
-                    }
-                } else {
-                    creditoActual = credito.subtract(cargo);
-                }
-            } else {
-                cred = creditoBo.findById(user, cred);
-                if (cred.getFolioNota().contains(",")) {
-                    BigDecimal cargoCredito = BigDecimal.ZERO;
-                    for (DtoNotaVenta notas : notaVentaBo.findAll(user)) {
-                        notas.setDetalles(detalleNotaVentaBo.findAll(user, DetalleNotaVentaFactory.newInstance(notas.getIdNotaVenta())));
-                        for (String str : StringUtils.split(cred.getFolioNota())) {
-                            if (notas.getFolio().equals(str)) {
-                                for (DtoDetalleNotaVenta detalles : notas.getDetalles()) {
-                                    cargoCredito = cargoCredito.add(detalles.getSubTotal());
-                                }
-                                for (DtoMovimientos movs : notaVenta.getMovimientos()) {
-                                    DtoAbonos abono = movs.getAbonos();
-                                    abonoCredito = abonoCredito.add(abono.getAbonoAnterior());
-                                }
-                            }
-                        }
-                    }
-                    creditoActual = new BigDecimal(new DecimalFormat("######.00").format(credito.subtract(cargoCredito)));
-                    creditoActual = new BigDecimal(new DecimalFormat("######.00").format(creditoActual.add(abonoCredito)));
-                } else {
-                    creditoActual = new BigDecimal(new DecimalFormat("######.00").format(credito.subtract(cargo)));
-                    creditoActual = new BigDecimal(new DecimalFormat("######.00").format(creditoActual.add(abonoCredito)));
-                }
-            }
-            if (creditoActual.compareTo(credito) >= 0) {
-                updateCredito(notaVenta.getMovimiento().getCredito());
-                statusCredito = "SIN APLICAR";
-                fechaRegistro = "SIN APLICAR";
-                fechaLimite = "SIN APLICAR";
-                noNota = "";
-                creditoActual = credito;
-            }
-        } else {
-            statusCredito = "SIN APLICAR";
-            creditoActual = credito;
-        }
-        if (notaVenta.getMovimiento().getCredito().getFechaPago() != null) {
-            fechaRegistro = DateUtils.dateToString(notaVenta.getMovimiento().getCredito().getFechaRegistro());
-        } else {
-            fechaRegistro = "SIN APLICAR";
-        }
-        idCredito = notaVenta.getMovimiento().getCredito().getIdCredito();
-
         sb.append(
                 "<form id='frmRegistroAbono' name='frmRegistroAbono'>").append("<img src='").append(context)
                 .append("/image/logo.jpg' style='width: 75px; height: 75px; position: absolute; margin-top: 5px;' />")
@@ -473,54 +331,56 @@ public class TablesUtils {
                 .append(notaVenta.getPedido().getNombreVendedor()).append("' size='").append((notaVenta.getPedido().getNombreVendedor().length() + 2)).append("' readOnly='readOnly' />")
                 .append("</td></tr></tbody></table></div><div id='listaCargos' style='width:300px; margin:-160px 0px 0px 310px;'><table class='table table-bordered table-hover'><thead><tr><th colspan='2' style=' text-align: center; width:25px;' >CARGOS</th></tr></thead>")
                 .append("<tbody><tr><td><strong>CARGO :</strong></td><td> <label id='lblCargo'>");
-        if (cargoAnterior.compareTo(BigDecimal.ZERO) == 0) {
-            sb.append(cargo);
-        } else {
-            sb.append(cargoAnterior);
-        }
 
+        if (getCargoAnterior(notaVenta).compareTo(BigDecimal.ZERO) == 0) {
+            sb.append(getCargo(notaVenta));
+        } else {
+            sb.append(getCargoAnterior(notaVenta));
+        }
         sb.append(
                 "</label></td></tr>")
-                .append("<tr><td><strong>DEVOLUCI&Oacute;N :</strong></td><td> <label id='lblDevolucion'>").append(cargoDevolucion)
+                .append("<tr><td><strong>DEVOLUCI&Oacute;N :</strong></td><td> <label id='lblDevolucion'>").append(getCargoDevolucion(notaVenta))
                 .append("</label></td></tr>")
-                .append("<tr><td><strong>CARGO TOTAL :</strong></td><td> <label id='lblTotal'>").append(cargo)
+                .append("<tr><td><strong>CARGO TOTAL :</strong></td><td> <label id='lblTotal'>").append(getCargo(notaVenta))
                 .append("</label></td></tr></tbody></table></div>");
-        if (idCredito
-                != null) {
-            sb.append("<div id='listaCredito' style='width:485px; margin:-180px 0px 0px 620px;'>")
-                    .append("<table class='table table-bordered table-hover'><thead><tr><th colspan='2' style=' text-align: center;' >CREDITOS</th></tr></thead>")
-                    .append("<tbody><tr><td><strong>TIPO CR&Eacute;DITO :</strong> ").append(tipoCredito).append(" </td><td><strong>ESTATUS CR&Eacute;DITO : </strong>").append(
-                            ("A".equals(statusCredito) ? "VIGENTE" : ("V".equals(statusCredito) ? "VENCIDO" : "SIN APLICAR"))).append("</td></tr>")
-                    .append("<tr><td><strong> FECHA REGISTRO : </strong>").append(fechaRegistro).append("</td>");
-            if (tipoCredito.equals(Variables.PLAZO.toUpperCase())) {
-                sb.append(" <td><br><strong>FECHA LIMITE : </strong>").append(fechaLimite).append("</td></tr>");
-                if (noNota != null) {
-                    sb.append("<tr><td colspan='2'><strong>NO NOTAS  :</strong> ").append(noNota).append("</td></tr>");
+        sb.append("<div id='listaCredito' style='width:485px; margin:-180px 0px 0px 620px;'>")
+                .append("<table class='table table-bordered table-hover'><thead><tr><th colspan='2' style=' text-align: center;' >CREDITOS</th></tr></thead>")
+                .append("<tbody><tr><td><strong>TIPO CR&Eacute;DITO :</strong> ");
+        DtoCredito credito = getCredito(notaVenta);
+        if (credito != null) {
+
+            sb.append(credito.getTipoCredito()).append(" </td><td><strong>ESTATUS CR&Eacute;DITO : </strong>").append(
+                    ("A".equals(credito.getEstatusCredito()) ? "VIGENTE" : ("V".equals(credito.getEstatusCredito()) ? "VENCIDO" : "SIN APLICAR"))).append("</td></tr>")
+                    .append("<tr><td><strong> FECHA REGISTRO : </strong>").append(DateUtils.dateToString(credito.getFechaRegistro())).append("</td>");
+            if (credito.getTipoCredito().equals(Variables.PLAZO.toUpperCase())) {
+                sb.append(" <td><br><strong>FECHA LIMITE : </strong>").append(credito.getFechaPago()).append("</td></tr>");
+                if (credito.getFolioNota() != null) {
+                    sb.append("<tr><td colspan='2'><strong>NO NOTAS  :</strong> ").append(credito.getFolioNota()).append("</td></tr>");
                 }
-            } else if (tipoCredito.equals(Variables.CONTRA_NOTA.toUpperCase())) {
-                if (noNota != null) {
-                    sb.append("<tr><td><strong>NO NOTA : </strong>").append(noNota).append("</td></tr>");
+            } else if (credito.getTipoCredito().equals(Variables.CONTRA_NOTA.toUpperCase())) {
+                if (credito.getFolioNota() != null) {
+                    sb.append("<tr><td><strong>NO NOTA : </strong>").append(credito.getFolioNota()).append("</td></tr>");
                 }
-            } else if (tipoCredito.equals(Variables.MONETARIO.toUpperCase())) {
-                if (noNota != null) {
-                    sb.append("<tr><td><strong> NO NOTAS : </strong>").append(noNota).append("</td></tr>");
+            } else if (credito.getTipoCredito().equals(Variables.MONETARIO.toUpperCase())) {
+                if (credito.getFolioNota() != null) {
+                    sb.append("<tr><td><strong> NO NOTAS : </strong>").append(credito.getFolioNota()).append("</td></tr>");
                 }
             }
-            if (!"A".equals(statusCredito)) {
-                sb.append("<tr><td><strong>LIMITE CR&Eacute;DITO :</strong> <label id='lblLimiteCredito'>").append(credito).append("</label>").append("</td>")
-                        .append("<td><strong>CR&Eacute;DITO DISPONIBLE : </strong><label id='lblCreditoUsado'>").append(creditoActual).append("</label>").append("</td></tr>");
+            if (!"A".equals(credito.getEstatusCredito())) {
+                sb.append("<tr><td><strong>LIMITE CR&Eacute;DITO :</strong> <label id='lblLimiteCredito'>").append(credito.getCantidadMonetaria()).append("</label>").append("</td>")
+                        .append("<td><strong>CR&Eacute;DITO DISPONIBLE : </strong><label id='lblCreditoUsado'>").append(getCreditoActual(notaVenta, credito)).append("</label>").append("</td></tr>");
                 if (DateUtils.dateToString(notaVenta.getFecha()).equals(DateUtils.dateToString(DateUtils.dateNow()))) {
                     sb.append("<tr><td colspan='2'><center><input type='button' id='btnAplicar' name='btnAplicar' onClick='aplicarCredito(\"")
-                            .append(tipoCredito).append("\",\"").append(notaVenta.getFolio()).append("\",").append(idCredito)
+                            .append(credito.getTipoCredito()).append("\",\"").append(notaVenta.getFolio()).append("\",").append(credito.getIdCredito())
                             .append(",").append(notaVenta.getIdNotaVenta())
-                            .append(");' value='Aplicar Crédito' /></center>").append("</td></tr></tbody></table></div>");
+                            .append(");' value='Aplicar Cr&eacute;dito' /></center>").append("</td></tr></tbody></table></div>");
                 } else {
                     sb.append("</tbody></table></div>");
                 }
             } else {
-                sb.append("<tr><td><strong>LIMITE CR&Eacute;DITO : </strong><label id='lblLimiteCredito'>").append(credito).append("</label>").append("</td>")
-                        .append("<td><strong><label id='lblNegativo'>CR&Eacute;DITO DISPONIBLE : </label></strong><label id='lblCreditoUsado'>").append(creditoActual).append("</label>").append("</td></tr>")
-                        .append("<tr><td colspan='2' style=' text-align: center; width:25px;'><center><input type='button' id='btnAplicar' name='btnAplicar' value='Crédito Aplicado' disabled='disabled'/></center>").append("</td></tr></tbody></table></div>");
+                sb.append("<tr><td><strong>LIMITE CR&Eacute;DITO : </strong><label id='lblLimiteCredito'>").append(credito.getCantidadMonetaria()).append("</label>").append("</td>")
+                        .append("<td><strong><label id='lblNegativo'>CR&Eacute;DITO DISPONIBLE : </label></strong><label id='lblCreditoUsado'>").append(getCreditoActual(notaVenta, credito)).append("</label>").append("</td></tr>")
+                        .append("<tr><td colspan='2' style=' text-align: center; width:25px;'><center><input type='button' id='btnAplicar' name='btnAplicar' value='Cr&eacute;dito Aplicado' disabled='disabled'/></center>").append("</td></tr></tbody></table></div>");
             }
         }
 
@@ -532,11 +392,12 @@ public class TablesUtils {
                 .append("<th style='text-align: center; width:25px;'> ABONO ANTERIOR</th>")
                 .append("<th style='text-align: center; width:25px;'> CARGO RESTANTE</th></tr></thead><tbody>");
         StringBuilder content = new StringBuilder();
-        index = 1;
+        Integer index = 1;
         DecimalFormat formato = new DecimalFormat("$ #,###.00");
         for (DtoMovimientos movs : notaVenta.getMovimientos()) {
             DtoAbonos abono = movs.getAbonos();
             if (abono.getIdAbonos() != null) {
+                BigDecimal cargo = getCargo(notaVenta);
                 cargo = cargo.subtract(movs.getAbonos().getAbono());
                 String abonoFormateado = formato.format(abono.getAbonoAnterior());
                 String cargoFormateado = formato.format(cargo);
@@ -556,6 +417,147 @@ public class TablesUtils {
         sb.append(content)
                 .append("</form>");
         return sb.toString();
+    }
+
+    private static BigDecimal getCargo(DtoNotaVenta object) {
+        BigDecimal cargo = BigDecimal.ZERO;
+        for (DtoMovimientos movs : object.getMovimientos()) {
+            cargo = movs.getCargos().getCargo();
+        }
+        return cargo;
+    }
+
+    private static BigDecimal getCargoAnterior(DtoNotaVenta object) {
+        BigDecimal cargoAnterior = BigDecimal.ZERO;
+        for (DtoMovimientos movs : object.getMovimientos()) {
+            cargoAnterior = (movs.getCargos().getCargoAnterior() == null ? BigDecimal.ZERO : movs.getCargos().getCargoAnterior());
+        }
+        return cargoAnterior;
+    }
+
+    private static BigDecimal getCargoDevolucion(DtoNotaVenta object) {
+        Integer index = 0;
+        Integer idNotaVentaAnterior = 0;
+        BigDecimal cargoDevolucion = BigDecimal.ZERO;
+        for (DtoMovimientos movs : object.getMovimientos()) {
+            if (!Objects.equals(idNotaVentaAnterior, movs.getNotaVenta().getIdNotaVenta())) {
+                for (DtoDetalleDevoluciones devoluciones : movs.getDevoluciones().getDetalles()) {
+                    cargoDevolucion = cargoDevolucion.add(devoluciones.getSubtotal());
+                }
+            }
+            index++;
+            idNotaVentaAnterior = movs.getNotaVenta().getIdNotaVenta();
+        }
+        return cargoDevolucion;
+    }
+
+    private static DtoCredito getCredito(DtoNotaVenta object) {
+        Integer index = 0;
+        Integer idNotaVentaAnterior = 0;
+        DtoCredito credito = CreditoFactory.newInstance();
+        for (DtoMovimientos movs : object.getMovimientos()) {
+            if (!Objects.equals(idNotaVentaAnterior, movs.getNotaVenta().getIdNotaVenta())) {
+                if (!StringUtils.isReallyEmptyOrNull(movs.getCredito().getTipoCredito())) {
+                    if (movs.getCredito().getTipoCredito().equals(Variables.PLAZO.toUpperCase())) {
+                        credito.setCantidadMonetaria(movs.getCredito().getCantidadMonetaria());
+                        if (movs.getCredito().getFechaPago() != null) {
+                            credito.setFechaPago(movs.getCredito().getFechaPago());
+                            credito.setFolioNota(movs.getCredito().getFolioNota());
+                        }
+                    } else if (movs.getCredito().getTipoCredito().equals(Variables.MONETARIO.toUpperCase())) {
+                        credito.setCantidadMonetaria(movs.getCredito().getCantidadMonetaria());
+                        credito.setFolioNota(movs.getCredito().getFolioNota());
+                    } else if (movs.getCredito().getTipoCredito().equals(Variables.CONTRA_NOTA.toUpperCase())) {
+                        credito.setFolioNota(movs.getCredito().getFolioNota());
+                    }
+                    if (!StringUtils.isReallyEmptyOrNull(movs.getCredito().getEstatusCredito())) {
+                        credito.setEstatusCredito(movs.getCredito().getEstatusCredito());
+                    }
+                    credito.setFechaRegistro(movs.getCredito().getFechaRegistro());
+                    credito.setIdCredito(movs.getCredito().getIdCredito());
+                    credito.setTipoCredito(movs.getCredito().getTipoCredito());
+                }
+            }
+            index++;
+            idNotaVentaAnterior = movs.getNotaVenta().getIdNotaVenta();
+        }
+        return credito;
+    }
+
+    private static BigDecimal getCreditoActual(DtoNotaVenta object, DtoCredito credito) {
+        BigDecimal abonoCredito = BigDecimal.ZERO;
+        BigDecimal creditoActual;
+        BigDecimal cargo = BigDecimal.ZERO;
+        BigDecimal cargoCredito;
+        DtoCredito cred = creditoBo.findById(user, credito);
+        Integer idAbonoAnterior = 0;
+        if (cred.getFolioNota().contains(",")) {
+            cargoCredito = BigDecimal.ZERO;
+            for (DtoNotaVenta notas : notaVentaBo.findAll(user)) {
+                notas.setDetalles(detalleNotaVentaBo.findAll(user, DetalleNotaVentaFactory.newInstance(notas.getIdNotaVenta())));
+                for (String str : StringUtils.split(cred.getFolioNota())) {
+                    if (notas.getFolio().equals(str)) {
+                        for (DtoDetalleNotaVenta detalles : notas.getDetalles()) {
+                            cargoCredito = cargoCredito.add(detalles.getSubTotal());
+                        }
+                        for (DtoMovimientos movs : object.getMovimientos()) {
+                            if (notas.getFolio().equals(str)) {
+                                cargo = cargo.add(movs.getCargos().getCargo());
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            for (String str : StringUtils.split(cred.getFolioNota())) {
+                for (DtoNotaVenta notas : notaVentaBo.findAll(user)) {
+                    if (notas.getFolio().equals(str)) {
+                        DtoMovimientos movimientos = MovimientosFactory.newInstance();
+                        movimientos.setNotaVenta(notas);
+                        for (DtoMovimientos movs : movimientosBo.findAll(user, movimientos)) {
+                            movs.setAbonos(abonosBo.findById(user, movs.getAbonos()));
+                            if (movs.getAbonos().getIdAbonos() != null) {
+                                if (!Objects.equals(idAbonoAnterior, movs.getAbonos().getIdAbonos())) {
+                                    abonoCredito = abonoCredito.add(movs.getAbonos().getAbono());
+                                    idAbonoAnterior = movs.getAbonos().getIdAbonos();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            cargoCredito = credito.getCantidadMonetaria().subtract(cargoCredito);
+            creditoActual = new BigDecimal(new DecimalFormat("######.00").format(cargoCredito.add(abonoCredito)));
+        } else {
+            cargoCredito = BigDecimal.ZERO;
+            for (DtoNotaVenta notas : notaVentaBo.findAll(user)) {
+                notas.setDetalles(detalleNotaVentaBo.findAll(user, DetalleNotaVentaFactory.newInstance(notas.getIdNotaVenta())));
+                if (notas.getFolio().equals(object.getFolio())) {
+                    for (DtoDetalleNotaVenta detalles : notas.getDetalles()) {
+                        cargoCredito = cargoCredito.add(detalles.getSubTotal());
+                    }
+                    for (DtoMovimientos movs : object.getMovimientos()) {
+                        if (notas.getFolio().equals(object.getFolio())) {
+                            cargo = cargo.add(movs.getCargos().getCargo());
+                            break;
+                        }
+                    }
+                    for (DtoMovimientos movs : object.getMovimientos()) {
+                        if (Objects.equals(object.getIdNotaVenta(), movs.getNotaVenta().getIdNotaVenta())) {
+                            if (movs.getAbonos().getIdAbonos() != null) {
+                                abonoCredito = abonoCredito.add(movs.getAbonos().getAbono());
+                            }
+                        }
+                    }
+                }
+            }
+            cargoCredito = credito.getCantidadMonetaria().subtract(cargoCredito);
+            creditoActual = new BigDecimal(new DecimalFormat("######.00").format(cargoCredito.add(abonoCredito)));
+        }
+        if (creditoActual.compareTo(cred.getCantidadMonetaria()) == 0) {
+            updateCredito(cred);
+        }
+        return creditoActual;
     }
 
     private static void updateCredito(DtoCredito object) {
@@ -579,6 +581,14 @@ public class TablesUtils {
 
     public static void setDetalleNotaVentaBo(DetalleNotaVentaBo aDetalleNotaVentaBo) {
         detalleNotaVentaBo = aDetalleNotaVentaBo;
+    }
+
+    public static void setMovimientosBo(MovimientosBo aMovimientosBo) {
+        movimientosBo = aMovimientosBo;
+    }
+
+    public static void setAbonosBo(AbonosBo aAbonosBo) {
+        abonosBo = aAbonosBo;
     }
 
 }

@@ -33,6 +33,7 @@ import mx.com.villavicencio.system.venta.devoluciones.devoluciones.factory.Devol
 import mx.com.villavicencio.system.venta.nota.bo.NotaVentaBo;
 import mx.com.villavicencio.system.venta.nota.dto.DtoNotaVenta;
 import mx.com.villavicencio.system.venta.nota.factory.NotaVentaFactory;
+import mx.com.villavicencio.utils.TablesUtils;
 
 /**
  *
@@ -50,6 +51,10 @@ public class AbonosBoImpl implements AbonosBo {
     private CargosBo cargosBo;
     private DevolucionesBo devolucionesBo;
 
+    public AbonosBoImpl() {
+        TablesUtils.setAbonosBo(this);
+    }
+    
     @Override
     public Collection<DtoCliente> findAllClientes(DtoUsuario user) {
         if ((user != null) && (user.getIdUsuario() != 0)) {

@@ -9,6 +9,7 @@ import mx.com.villavicencio.system.movimientos.movimientos.bo.MovimientosBo;
 import mx.com.villavicencio.system.movimientos.movimientos.dao.MovimientosDao;
 import mx.com.villavicencio.system.movimientos.movimientos.dto.DtoMovimientos;
 import mx.com.villavicencio.system.usuario.dto.DtoUsuario;
+import mx.com.villavicencio.utils.TablesUtils;
 
 /**
  *
@@ -17,6 +18,10 @@ import mx.com.villavicencio.system.usuario.dto.DtoUsuario;
 public class MovimientosBoImpl implements MovimientosBo {
 
     private MovimientosDao movimientosDao;
+
+    public MovimientosBoImpl() {
+        TablesUtils.setMovimientosBo(this);
+    }
 
     @Override
     public Collection<DtoMovimientos> findAll(DtoUsuario user, DtoMovimientos object) {
