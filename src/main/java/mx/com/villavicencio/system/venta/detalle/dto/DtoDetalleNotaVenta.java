@@ -1,12 +1,12 @@
 package mx.com.villavicencio.system.venta.detalle.dto;
 
 import java.math.BigDecimal;
+import mx.com.villavicencio.system.venta.devoluciones.detalle.dto.DtoDetalleDevoluciones;
 
 /**
  *
  * @author Gabriel J
  */
-
 public class DtoDetalleNotaVenta {
 
     private Integer idNotaVenta;
@@ -18,7 +18,8 @@ public class DtoDetalleNotaVenta {
     private Boolean isAgotado;
     private Boolean isMuestra;
     private String observaciones;
-    
+    private DtoDetalleDevoluciones devoluciones;
+
     public Integer getIdNotaVenta() {
         return idNotaVenta;
     }
@@ -89,5 +90,13 @@ public class DtoDetalleNotaVenta {
 
     public void setObservaciones(String observaciones) {
         this.observaciones = observaciones;
+    }
+
+    public DtoDetalleDevoluciones getDevoluciones() {
+        return devoluciones;
+    }
+
+    public void setDevoluciones(DtoDetalleDevoluciones devoluciones) {
+        this.devoluciones = devoluciones;
     }
 }

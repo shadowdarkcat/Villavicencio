@@ -41,6 +41,8 @@ import mx.com.villavicencio.system.productos.productos.factory.ProductoFactory;
 import mx.com.villavicencio.system.usuario.dto.DtoUsuario;
 import mx.com.villavicencio.system.vendedor.dto.DtoVendedor;
 import mx.com.villavicencio.system.vendedor.factory.VendedorFactory;
+import mx.com.villavicencio.system.venta.nota.bo.NotaVentaBo;
+import mx.com.villavicencio.system.venta.nota.dto.DtoNotaVenta;
 import mx.com.villavicencio.utils.DateUtils;
 import mx.com.villavicencio.utils.ImageUtils;
 import mx.com.villavicencio.utils.NumberUtils;
@@ -270,11 +272,11 @@ public class PedidosController extends HttpServlet {
                     case GET_REPORTE:
                     pedido = getPedidoFromRequest(request);
                     if ((pedido.getIdPedido()!= null) && (pedido.getIdPedido()!= 0)) {
-                        pedido = this.pedidoBo.findById(user, pedido);
+                        pedido = this.pedidoBo.findPedidoReporteById(user, pedido);
                         rutaServer = getServletContext().getRealPath("/");
                         rutaReporte = getServletContext().getRealPath("/reports/"
                                 + request.getParameter(Variables.NOMBRE_REPORTE) + "/");
-
+                        
                         ReporteFactory.newInstance().generarReporte(user, pedido, rutaServer,
                                 rutaReporte, Variables.PDF, response);
                     } else {
@@ -285,7 +287,7 @@ public class PedidosController extends HttpServlet {
                             if (!StringUtils.isReallyEmptyOrNull(request.getParameter(Text.FORMATO_REPORTE))) {
                                 switch (request.getParameter(Text.FORMATO_REPORTE)) {
                                     case Variables.PDF:
-                                        ReporteFactory.newInstance().generarReporte(user, this.pedidoBo.findAll(user), rutaServer,
+                                        ReporteFactory.newInstance().generarReporte(user, this.pedidoBo.findAllPedidoReporte(user), rutaServer,
                                                 rutaReporte, Variables.PDF, response);
                                         break;
                                     case Variables.EXCEL:

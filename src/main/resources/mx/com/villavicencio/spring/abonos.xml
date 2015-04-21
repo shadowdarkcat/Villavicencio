@@ -19,6 +19,8 @@
         <property name="vendedorBo" ref="vendedoresService" />
         <property name="cargosBo" ref="cargosService" />
         <property name="devolucionesBo" ref="devolucionesService" />
+        <property name="bancosBo" ref="bancosService" />
+        <property name="creditoBo" ref = "creditosService" />
     </bean>
     
     <bean id="abonosDao" class="mx.com.villavicencio.system.movimientos.abonos.dao.impl.AbonosDaoImpl">

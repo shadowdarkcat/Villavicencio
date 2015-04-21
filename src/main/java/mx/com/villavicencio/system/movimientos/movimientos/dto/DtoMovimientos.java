@@ -1,5 +1,7 @@
 package mx.com.villavicencio.system.movimientos.movimientos.dto;
 
+import java.math.BigDecimal;
+import java.util.Collection;
 import mx.com.villavicencio.system.credito.credito.dto.DtoCredito;
 import mx.com.villavicencio.system.movimientos.abonos.dto.DtoAbonos;
 import mx.com.villavicencio.system.movimientos.cargos.dto.DtoCargos;
@@ -21,7 +23,9 @@ public class DtoMovimientos {
     private DtoDevoluciones devoluciones;
     private DtoPedido pedido;
     private Integer opcion;
-
+    private Collection<DtoMovimientos> movimientos;
+    private Integer noMovimiento;   
+    
     public DtoCargos getCargos() {
         return cargos;
     }
@@ -76,5 +80,21 @@ public class DtoMovimientos {
 
     public void setOpcion(Integer opcion) {
         this.opcion = opcion;
+    }
+
+    public Collection<DtoMovimientos> getMovimientos() {
+        return movimientos;
+    }
+
+    public void setMovimientos(Collection<DtoMovimientos> movimientos) {
+        this.movimientos = movimientos;
+    }
+
+    public Integer getNoMovimiento() {
+        return noMovimiento;
+    }
+
+    public void setNoMovimiento(Integer noMovimiento) {
+        this.noMovimiento = noMovimiento;
     }
 }

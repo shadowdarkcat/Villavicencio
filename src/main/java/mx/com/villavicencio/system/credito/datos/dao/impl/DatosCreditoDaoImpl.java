@@ -16,6 +16,8 @@ import mx.com.villavicencio.system.credito.datos.dao.sql.procedure.Procedure;
 import mx.com.villavicencio.system.credito.datos.dao.sql.view.View;
 import mx.com.villavicencio.system.vendedor.dto.DtoVendedor;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -43,15 +45,18 @@ public class DatosCreditoDaoImpl extends JdbcDaoSupport implements DatosCreditoD
 
     @Override
     public Integer findDatosCreditoById(DtoCliente cliente, DtoVendedor vendedor) {
-        Object [] args;
+        Object[] args;
         try {
-            if((cliente != null) && (cliente.getIdCliente() != null)){
+            if ((cliente != null) && (cliente.getIdCliente() != null)) {
                 args = new Object[]{cliente.getIdCliente()};
                 return getJdbcTemplate().queryForObject(View.VIEW_DATOS_CREDITO_CLIENTE, args, new DatosCreditoRowMapper());
-            }else if((vendedor != null) && (vendedor.getIdVendedor() != null)){
+            } else if ((vendedor != null) && (vendedor.getIdVendedor() != null)) {
                 args = new Object[]{vendedor.getIdVendedor()};
                 return getJdbcTemplate().queryForObject(View.VIEW_DATOS_CREDITO_VENDEDOR, args, new DatosCreditoRowMapper());
             }
+        } catch (EmptyResultDataAccessException ex) {
+            return null;
+        } catch (IncorrectResultSizeDataAccessException ex) {
             return null;
         } catch (DataAccessException ex) {
             ApplicationMessages.errorMessage(PropertiesBean.getErrorFile().getProperty(Property.ERROR_INSERT)
@@ -59,6 +64,7 @@ public class DatosCreditoDaoImpl extends JdbcDaoSupport implements DatosCreditoD
                     .getSimpleName(), ex);
             throw new ApplicationException(PropertiesBean.getErrorFile().getProperty(Property.ERROR_INSERT));
         }
+        return null;
     }
 
     private SqlParameterSource getParameters(DtoCliente cliente, DtoVendedor vendedor, DtoCredito credito) {

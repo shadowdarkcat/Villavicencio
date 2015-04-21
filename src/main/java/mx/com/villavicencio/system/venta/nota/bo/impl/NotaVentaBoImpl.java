@@ -1,19 +1,21 @@
 package mx.com.villavicencio.system.venta.nota.bo.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import mx.com.villavicencio.commons.exception.ApplicationException;
 import mx.com.villavicencio.commons.messages.ApplicationMessages;
+import mx.com.villavicencio.generics.types.GenericTypes;
 import mx.com.villavicencio.properties.PropertiesBean;
 import mx.com.villavicencio.properties.Property;
 import mx.com.villavicencio.system.cliente.factory.ClienteFactory;
 import mx.com.villavicencio.system.credito.credito.bo.CreditoBo;
-import mx.com.villavicencio.system.credito.credito.dto.DtoCredito;
 import mx.com.villavicencio.system.credito.credito.factory.CreditoFactory;
 import mx.com.villavicencio.system.credito.datos.bo.DatosCreditoBo;
 import mx.com.villavicencio.system.movimientos.abonos.bo.AbonosBo;
 import mx.com.villavicencio.system.movimientos.bancos.bo.BancosBo;
 import mx.com.villavicencio.system.movimientos.cargos.bo.CargosBo;
+import mx.com.villavicencio.system.movimientos.cargos.dto.DtoCargos;
 import mx.com.villavicencio.system.movimientos.movimientos.bo.MovimientosBo;
 import mx.com.villavicencio.system.movimientos.movimientos.dto.DtoMovimientos;
 import mx.com.villavicencio.system.movimientos.movimientos.factory.MovimientosFactory;
@@ -26,12 +28,16 @@ import mx.com.villavicencio.system.pedido.pedido.factory.PedidoFactory;
 import mx.com.villavicencio.system.usuario.dto.DtoUsuario;
 import mx.com.villavicencio.system.vendedor.factory.VendedorFactory;
 import mx.com.villavicencio.system.venta.detalle.bo.DetalleNotaVentaBo;
+import mx.com.villavicencio.system.venta.detalle.dto.DtoDetalleNotaVenta;
 import mx.com.villavicencio.system.venta.detalle.factory.DetalleNotaVentaFactory;
+import mx.com.villavicencio.system.venta.devoluciones.detalle.dto.DtoDetalleDevoluciones;
+import mx.com.villavicencio.system.venta.devoluciones.detalle.factory.DetalleDevolucionesFactory;
 import mx.com.villavicencio.system.venta.devoluciones.devoluciones.bo.DevolucionesBo;
 import mx.com.villavicencio.system.venta.nota.bo.NotaVentaBo;
 import mx.com.villavicencio.system.venta.nota.dao.NotaVentaDao;
 import mx.com.villavicencio.system.venta.nota.dto.DtoNotaVenta;
 import mx.com.villavicencio.utils.TablesUtils;
+import mx.com.villavicencio.utils.TraductorUtils;
 
 /**
  *
@@ -142,6 +148,82 @@ public class NotaVentaBoImpl implements NotaVentaBo {
         if ((user != null) && (user.getIdUsuario() != 0)) {
             ApplicationMessages.errorMessage(PropertiesBean.getErrorFile().getProperty(Property.NO_DESARROLLADO));
             throw new ApplicationException(PropertiesBean.getErrorFile().getProperty(Property.NO_DESARROLLADO));
+        } else {
+            ApplicationMessages.errorMessage(PropertiesBean.getErrorFile().getProperty(Property.ACCESO_DENEGADO));
+            throw new ApplicationException(PropertiesBean.getErrorFile().getProperty(Property.ACCESO_DENEGADO));
+        }
+    }
+
+    @Override
+    public DtoNotaVenta findNotaVentaById(DtoUsuario user, DtoNotaVenta object) {
+        if ((user != null) && (user.getIdUsuario() != 0)) {
+            object = this.notaVentaDao.findById(object);
+            object.setDetalles(this.detalleNotaVentaBo.findAll(user, DetalleNotaVentaFactory.newInstance(object.getIdNotaVenta())));
+            DtoMovimientos movimientos = MovimientosFactory.newInstance();
+            movimientos.setNotaVenta(object);
+            for (DtoMovimientos movs : movimientosBo.findAll(user, movimientos)) {
+                DtoCargos findById = cargosBo.findById(user, movs.getCargos());
+                object.setTotal(findById.getCargo());
+                object.setCantidadLetra(TraductorUtils.traducir(findById.getCargo()));
+                break;
+            }
+            return object;
+        } else {
+            ApplicationMessages.errorMessage(PropertiesBean.getErrorFile().getProperty(Property.ACCESO_DENEGADO));
+            throw new ApplicationException(PropertiesBean.getErrorFile().getProperty(Property.ACCESO_DENEGADO));
+        }
+    }
+
+    @Override
+    public Collection<DtoNotaVenta> findAllReport(DtoUsuario user) {
+        if ((user != null) && (user.getIdUsuario() != 0)) {
+            Collection<DtoNotaVenta> collection = new ArrayList<>();
+            for (DtoNotaVenta notas : this.findAll(user)) {
+                notas = this.findNotaVentaReportById(user, notas);
+                collection.add(notas);
+            }
+            return collection;
+        } else {
+            ApplicationMessages.errorMessage(PropertiesBean.getErrorFile().getProperty(Property.ACCESO_DENEGADO));
+            throw new ApplicationException(PropertiesBean.getErrorFile().getProperty(Property.ACCESO_DENEGADO));
+        }
+    }
+
+    @Override
+    public DtoNotaVenta findNotaVentaReportById(DtoUsuario user, DtoNotaVenta object) {
+        if ((user != null) && (user.getIdUsuario() != 0)) {
+            object = this.notaVentaDao.findById(object);
+            Collection<DtoDetalleNotaVenta> collection = new ArrayList<>();
+            Collection<DtoDetalleNotaVenta> findAll = this.detalleNotaVentaBo.findAll(user, DetalleNotaVentaFactory.newInstance(object.getIdNotaVenta()));
+            for (DtoDetalleNotaVenta detalles : findAll) {
+                DtoMovimientos movimientos = MovimientosFactory.newInstance();
+                movimientos.setNotaVenta(object);
+                movimientos = this.movimientosBo.findById(user, movimientos);
+                DtoDetalleNotaVenta detalleNotaVenta = detalles;
+                if (movimientos.getDevoluciones().getIdDevoluciones() != null) {
+                    movimientos.setDevoluciones(this.devolucionesBo.findById(user, movimientos.getDevoluciones()));
+                    for (DtoDetalleDevoluciones detalleDevoluciones : movimientos.getDevoluciones().getDetalles()) {
+                        if (detalles.getNombreProducto().equals(detalleDevoluciones.getNombreProducto())) {
+                            detalleNotaVenta.setDevoluciones(detalleDevoluciones);
+                        } else {
+                            DtoDetalleDevoluciones dto = DetalleDevolucionesFactory.newInstance();
+                            dto.setCantidadKilos(BigDecimal.ZERO);
+                            dto.setCantidadPiezas(GenericTypes.ZERO);
+                            dto.setCosto(detalleDevoluciones.getCosto());
+                            detalleNotaVenta.setDevoluciones(dto);
+                        }
+                    }
+                }
+                for (DtoMovimientos movs : movimientosBo.findAll(user, movimientos)) {
+                    DtoCargos findById = cargosBo.findById(user, movs.getCargos());
+                    object.setTotal(findById.getCargo());
+                    object.setCantidadLetra(TraductorUtils.traducir(findById.getCargo()));
+                    break;
+                }
+                collection.add(detalleNotaVenta);
+            }
+            object.setDetalles(collection);
+            return object;
         } else {
             ApplicationMessages.errorMessage(PropertiesBean.getErrorFile().getProperty(Property.ACCESO_DENEGADO));
             throw new ApplicationException(PropertiesBean.getErrorFile().getProperty(Property.ACCESO_DENEGADO));

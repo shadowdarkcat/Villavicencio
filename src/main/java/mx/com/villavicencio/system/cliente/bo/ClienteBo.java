@@ -16,4 +16,8 @@ public interface ClienteBo extends GenericBo<DtoUsuario, DtoCliente> {
     Collection<DtoCliente> getDataCp(DtoUsuario user, DtoCliente object);
 
     Collection<DtoCliente> findByIdVendedor(DtoUsuario user);
+
+    DtoCliente findClienteReporteById(DtoUsuario user, DtoCliente object);
+
+    Collection<DtoCliente> findAllClienteReporte(DtoUsuario user);
 }

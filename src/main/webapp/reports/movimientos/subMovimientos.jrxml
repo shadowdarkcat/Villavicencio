@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="subMovimientos" pageWidth="892" pageHeight="842" whenNoDataType="NoDataSection" columnWidth="852" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="83ab691e-3409-489b-a040-10208bbe057b">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="PATH_IMAGENES" class="java.lang.String"/>
+	<parameter name="SALDO_DISPONIBLE" class="java.math.BigDecimal"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="devoluciones" class="mx.com.villavicencio.system.venta.devoluciones.devoluciones.dto.DtoDevoluciones">
+		<fieldDescription><![CDATA[devoluciones]]></fieldDescription>
+	</field>
+	<field name="credito" class="mx.com.villavicencio.system.credito.credito.dto.DtoCredito">
+		<fieldDescription><![CDATA[credito]]></fieldDescription>
+	</field>
+	<field name="cargos" class="mx.com.villavicencio.system.movimientos.cargos.dto.DtoCargos">
+		<fieldDescription><![CDATA[cargos]]></fieldDescription>
+	</field>
+	<field name="notaVenta" class="mx.com.villavicencio.system.venta.nota.dto.DtoNotaVenta">
+		<fieldDescription><![CDATA[notaVenta]]></fieldDescription>
+	</field>
+	<field name="abonos" class="mx.com.villavicencio.system.movimientos.abonos.dto.DtoAbonos">
+		<fieldDescription><![CDATA[abonos]]></fieldDescription>
+	</field>
+	<field name="pedido" class="mx.com.villavicencio.system.pedido.pedido.dto.DtoPedido">
+		<fieldDescription><![CDATA[pedido]]></fieldDescription>
+	</field>
+	<field name="noMovimiento" class="java.lang.Integer">
+		<fieldDescription><![CDATA[noMovimiento]]></fieldDescription>
+	</field>
+	<variable name="noMov" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[Integer.valueOf("0")]]></variableExpression>
+		<initialValueExpression><![CDATA[]]></initialValueExpression>
+	</variable>
+	<variable name="sumAbono" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{abonos}.getAbono()]]></variableExpression>
+	</variable>
+	<variable name="credito" class="java.math.BigDecimal">
+		<variableExpression><![CDATA[$F{credito}.getCantidadMonetaria().subtract(
+            $F{cargos}.getCargo()
+        )]]></variableExpression>
+	</variable>
+	<columnHeader>
+		<band height="326" splitType="Stretch">
+			<image>
+				<reportElement x="0" y="20" width="80" height="79" uuid="13aaea5d-cc91-48bc-a96b-087b3126b582"/>
+				<imageExpression><![CDATA[$P{PATH_IMAGENES} + "logo.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="0" y="135" width="70" height="20" uuid="229ca387-585f-4050-a97d-4ec9a5e76973"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle"/>
+				<text><![CDATA[FOLIO:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="115" width="70" height="20" uuid="48cec6b0-d37e-44df-b12c-5ffa13d7c704"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle"/>
+				<text><![CDATA[FECHA:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="618" y="70" width="192" height="20" uuid="3c8f71f5-8fd1-4fd2-9716-e93ebbec7765"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[String.valueOf($F{notaVenta}.getStatusNotaVenta())]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="618" y="50" width="192" height="20" uuid="330fdbb3-0871-436f-94a8-0e6696a8d85d"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{notaVenta}.getIdNotaVenta()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="538" y="50" width="80" height="20" uuid="c77efdfd-2b9f-4160-be75-98d7a367d73d"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle"/>
+				<text><![CDATA[No Nota:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="70" y="135" width="292" height="20" uuid="1e4d64be-7f77-4cfd-bf9d-d3596a136634"/>
+				<textFieldExpression><![CDATA[$F{notaVenta}.getFolio()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="10" width="852" height="30" uuid="b6103de1-2161-422b-a56f-0389c3b934e8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[REPORTE MOVIMIENTOS ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="538" y="70" width="80" height="20" uuid="58bc007c-502f-4acf-821a-414a1327f3dd"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle"/>
+				<text><![CDATA[Estado Nota:]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="70" y="115" width="292" height="20" uuid="9bd6c6cc-ca1d-4d4e-a7d4-f68cd4dc155c"/>
+				<textFieldExpression><![CDATA[$F{notaVenta}.getFecha()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="329" y="296" width="142" height="29" uuid="16f34e0a-0562-46c4-9e01-7feb52ca4d70"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[ABONO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="611" y="296" width="241" height="29" uuid="dbc48ecb-f1db-48c7-b7bf-8d1456b67206"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[BANCO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="171" y="297" width="158" height="29" uuid="9c526457-63c3-4928-9db9-11ce01606f16"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[CARGO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="170" width="70" height="18" uuid="0c98d707-ffd5-455b-b7a4-8b199ae8a977"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle"/>
+				<text><![CDATA[RFC:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="297" width="70" height="29" uuid="10ba6c80-7a3c-416c-b67f-fa013cd41771"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[No MOVIMIENTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="155" width="69" height="15" uuid="91436d18-b64b-443f-9bbc-95f3f67b47df"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle"/>
+				<text><![CDATA[CLIENTE:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="71" y="296" width="100" height="29" uuid="600ae246-148a-4d07-a2be-4fbc20d5a0f8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[FECHA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="471" y="296" width="140" height="29" uuid="4b6bc521-e8fc-4287-823c-92d6d8f6cff3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[TIPO PAGO]]></text>
+			</staticText>
+			<line>
+				<reportElement x="1" y="296" width="851" height="1" uuid="d8fa4f1f-0fd1-4d54-afb5-539e46991c26"/>
+			</line>
+			<line>
+				<reportElement x="2" y="325" width="851" height="1" uuid="1c0e48e2-fe9f-4789-bffb-4e3f32f69c00"/>
+			</line>
+			<textField>
+				<reportElement x="70" y="155" width="440" height="15" uuid="14e80cb0-3023-45df-96a5-0c8c405c0027"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{notaVenta}.getNombreCliente()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="70" y="170" width="292" height="18" uuid="6de32194-b3c6-4408-ad47-91a02a5df2fa"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{notaVenta}.getRfc() != null
+    ? $F{notaVenta}.getRfc()
+    : "NO APLICA"]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="538" y="115" width="272" height="147" uuid="390b143b-5b0b-43be-8c2a-021c81bd71d1">
+					<printWhenExpression><![CDATA[$F{credito}.getIdCredito() != null   ]]></printWhenExpression>
+				</reportElement>
+			</rectangle>
+			<textField>
+				<reportElement x="538" y="95" width="272" height="20" uuid="568f7059-c17f-41e3-a3a4-47f78673975b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{credito}.getIdCredito() != null
+    ? "CRÉDITO"
+    : ""]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="540" y="119" width="101" height="20" uuid="10b16a1e-7fe9-456f-b886-4fa007eb70a8">
+					<printWhenExpression><![CDATA[$F{credito}.getIdCredito() != null]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Tipo Crédito:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="641" y="119" width="169" height="20" uuid="dd501ef7-2985-4e5a-87dd-c09a66d33846">
+					<printWhenExpression><![CDATA[$F{credito}.getIdCredito() != null   ]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{credito}.getTipoCredito()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="540" y="139" width="101" height="20" uuid="1ed9ba28-d72f-44f2-9d8d-6138a0ef9d56">
+					<printWhenExpression><![CDATA[$F{credito}.getIdCredito() != null   ]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Fecha Registro:]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="641" y="139" width="169" height="20" uuid="ecfcb0c2-e6a6-4416-a636-6e49d307016f">
+					<printWhenExpression><![CDATA[$F{credito}.getIdCredito() != null   ]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{credito}.getFechaRegistro() != null
+    ? $F{credito}.getFechaRegistro()
+    : "----------"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="540" y="159" width="101" height="20" uuid="b593cfa1-1844-4b7d-a05c-93390f4b54df">
+					<printWhenExpression><![CDATA[$F{credito}.getIdCredito() != null   ]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Fecha Pago:]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="641" y="159" width="169" height="20" uuid="f7315db2-f347-420b-b4a3-e6f9b5bac6e8">
+					<printWhenExpression><![CDATA[$F{credito}.getIdCredito() != null   ]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{credito}.getFechaPago() != null
+    ? $F{credito}.getFechaPago()
+    : "----------"
+]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="541" y="179" width="100" height="20" uuid="5e07ff42-abae-4f98-b17e-1f3863a412e6">
+					<printWhenExpression><![CDATA[$F{credito}.getIdCredito() != null   ]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Límite Crédito:]]></text>
+			</staticText>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="641" y="179" width="169" height="20" uuid="4130fdc8-4f6a-4b0a-8783-a9fe500080b8">
+					<printWhenExpression><![CDATA[$F{credito}.getIdCredito() != null   ]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{credito}.getCantidadMonetaria() != null
+    ? $F{credito}.getCantidadMonetaria()
+    : new BigDecimal("0.0")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="541" y="199" width="100" height="20" uuid="ec58d031-4110-445c-a325-686b8417a56e">
+					<printWhenExpression><![CDATA[$F{credito}.getIdCredito() != null   ]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[N° Notas Aplicadas:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="641" y="199" width="169" height="20" uuid="2a5df22e-7834-4083-bb98-165a6d336515">
+					<printWhenExpression><![CDATA[$F{credito}.getIdCredito() != null   ]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{credito}.getFolioNota() != null
+    ? $F{credito}.getFolioNota()
+    : "----------"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="541" y="219" width="100" height="20" uuid="4ca73dd3-90dc-4bef-b2f2-b01f1313db17">
+					<printWhenExpression><![CDATA[$F{credito}.getIdCredito() != null   ]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Estado Crédito:]]></text>
+			</staticText>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="641" y="219" width="169" height="20" uuid="c1c8cccc-749b-4246-9c2b-57492423b8b8">
+					<printWhenExpression><![CDATA[$F{credito}.getIdCredito() != null   ]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{credito}.getEstatusCredito() != null
+    ? $F{credito}.getEstatusCredito()
+    : "Sin Aplicar"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="541" y="239" width="100" height="20" uuid="e7dae6f4-ca3b-4eca-9092-dca40610ff63">
+					<printWhenExpression><![CDATA[$F{credito}.getIdCredito() != null   ]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Saldo Disponible:]]></text>
+			</staticText>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="641" y="239" width="169" height="20" uuid="d34a66c7-6e63-4b42-b3f3-0a21520896fb">
+					<printWhenExpression><![CDATA[$F{credito}.getIdCredito() != null   ]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{SALDO_DISPONIBLE} != null
+    ? $P{SALDO_DISPONIBLE}
+    : new BigDecimal("0.0")]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="852" height="19" backcolor="#66CCFF" uuid="b56624c2-f36d-44ad-8c89-978088abeecf">
+					<printWhenExpression><![CDATA[$V{PAGE_COUNT} % 2 == 0]]></printWhenExpression>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="1.0" lineColor="#CCCCCC"/>
+				</graphicElement>
+			</rectangle>
+			<textField>
+				<reportElement x="0" y="0" width="70" height="20" uuid="258eb73c-d46a-4047-aaf8-771ae5130940"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{noMovimiento}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<reportElement x="170" y="0" width="158" height="20" uuid="e6544b23-e7aa-449e-adc6-2b4126091006"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{noMovimiento} == Integer.valueOf("1")
+        ? $F{cargos}.getCargo()
+        : "-----------"]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<reportElement x="328" y="-1" width="142" height="20" uuid="3301959a-34c8-4768-84d7-18153eefd7ec"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{abonos}.getAbono() != null
+        ? $F{abonos}.getAbono()
+        : "-----------"]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="70" y="0" width="100" height="20" uuid="4a077c1f-5020-4ac7-a8e4-143a486ab3f4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{abonos}.getFechaCaptura() != null
+    ? $F{abonos}.getFechaCaptura()
+    : $F{cargos}.getFechaCargo()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="470" y="0" width="140" height="20" uuid="db266dae-5b0a-4da5-b5a2-49d5f97529fc"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{abonos}.getTipoPago() != null
+    ? $F{abonos}.getTipoPago()
+    : "-----------"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="613" y="0" width="238" height="20" uuid="3f47c7aa-85bc-4d98-be06-af0d4b4e0371"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{abonos}.getBancos().getNombre() != null
+    ? $F{abonos}.getBancos().getNombre()
+    : "-----------"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="751" y="0" width="35" height="20" uuid="cee62ec7-c800-42cd-94aa-c88a0075041a"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Pagina]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="811" y="0" width="15" height="20" uuid="81f1f4be-fe9a-498a-9f27-4d82940092bf"/>
+				<textElement textAlignment="Center">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[de]]></text>
+			</staticText>
+			<textField evaluationTime="Report">
+				<reportElement x="826" y="0" width="25" height="20" uuid="889b178d-c9ff-4adc-ab0e-d955a9253bab"/>
+				<textElement textAlignment="Center">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="786" y="0" width="25" height="20" uuid="f90b4d26-67b0-4654-9f98-3bd63f8d6cd8"/>
+				<textElement textAlignment="Center">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="20" splitType="Stretch">
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="328" y="0" width="142" height="20" uuid="e3d4b70a-53a3-4499-ace5-e1c3315dcf6b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{sumAbono} != null
+    ? $V{sumAbono}
+    : new BigDecimal("0.0")]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="170" y="0" width="158" height="20" uuid="67dffa05-131e-423d-86ef-4d55fd2a3b5c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{cargos}.getCargo()]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+	<noData>
+		<band height="109">
+			<staticText>
+				<reportElement x="4" y="89" width="849" height="20" uuid="85cf5853-aec5-46b6-943c-e41592d1a80b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[NO SE HA GENERADO LA NOTA DE VENTA EL PEDIDO FUE CANCELADO O SU ESTADO ES PENDIENTE]]></text>
+			</staticText>
+			<image>
+				<reportElement x="3" y="10" width="80" height="79" uuid="cee71cd1-f2ba-48e9-baf2-a676e20eb65a"/>
+				<imageExpression><![CDATA[$P{PATH_IMAGENES} + "logo.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="3" y="0" width="852" height="30" uuid="2b7b878e-d3e9-4ad5-8b58-086d6169ba40"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[REPORTE MOVIMIENTOS ]]></text>
+			</staticText>
+		</band>
+	</noData>
+</jasperReport>

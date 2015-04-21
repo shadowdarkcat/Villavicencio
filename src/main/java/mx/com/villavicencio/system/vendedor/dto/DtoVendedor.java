@@ -47,7 +47,7 @@ public class DtoVendedor {
     private BigDecimal totalAbonado;
     private BigDecimal totalFaltante;
     private String table;
-
+    
     public Integer getIdVendedor() {
         return idVendedor;
     }
@@ -327,5 +327,4 @@ public class DtoVendedor {
     public void setTable(String table) {
         this.table = table;
     }
-
 }

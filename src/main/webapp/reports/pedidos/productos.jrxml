@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.0.0.final using JasperReports Library version 6.0.0  -->
-<!-- 2015-03-05T18:39:59 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="productos" pageWidth="890" pageHeight="842" columnWidth="850" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f300ee97-f655-449e-acb3-39c0048063bb">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
@@ -12,6 +10,9 @@
 	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<queryString language="SQL">
 		<![CDATA[]]>
 	</queryString>
@@ -25,29 +26,29 @@
 		<fieldDescription><![CDATA[nombreProducto]]></fieldDescription>
 	</field>
 	<columnHeader>
-		<band height="26" splitType="Stretch">
+		<band height="22" splitType="Stretch">
 			<property name="local_mesure_unitheight" value="pixel"/>
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<line>
-				<reportElement x="170" y="5" width="410" height="1" uuid="8bed755e-adfa-4bd8-8a71-31dd29511a66"/>
+				<reportElement x="170" y="1" width="410" height="1" uuid="8bed755e-adfa-4bd8-8a71-31dd29511a66"/>
 			</line>
 			<staticText>
-				<reportElement x="170" y="5" width="210" height="20" uuid="373071f2-5131-47e7-b68a-5fa7391444a5"/>
+				<reportElement x="170" y="1" width="210" height="20" uuid="373071f2-5131-47e7-b68a-5fa7391444a5"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[PRODUCTO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="380" y="5" width="100" height="20" uuid="1225c2c3-5e3e-4b06-b39e-6f96aab35093"/>
+				<reportElement x="380" y="1" width="100" height="20" uuid="1225c2c3-5e3e-4b06-b39e-6f96aab35093"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[PESO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="480" y="5" width="100" height="20" uuid="1ac08aa8-0c85-4085-bdd6-2dbb4df2ed6d"/>
+				<reportElement x="480" y="1" width="100" height="20" uuid="1ac08aa8-0c85-4085-bdd6-2dbb4df2ed6d"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[PIEZAS]]></text>
 			</staticText>
 			<line>
-				<reportElement x="170" y="25" width="410" height="1" uuid="b091dd54-10fe-489f-8fc1-1437960accb9"/>
+				<reportElement x="170" y="21" width="410" height="1" uuid="b091dd54-10fe-489f-8fc1-1437960accb9"/>
 			</line>
 		</band>
 	</columnHeader>

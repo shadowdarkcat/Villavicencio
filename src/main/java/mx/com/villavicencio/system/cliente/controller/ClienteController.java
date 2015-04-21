@@ -224,7 +224,7 @@ public class ClienteController extends HttpServlet {
                 case GET_REPORTE:
                     cliente = getClienteFromRequest(request);
                     if ((cliente.getIdCliente() != null) && (cliente.getIdCliente() != 0)) {
-                        cliente = this.clienteBo.findById(user, cliente);
+                        cliente = this.clienteBo.findClienteReporteById(user, cliente);
                         rutaServer = getServletContext().getRealPath("/");
                         rutaReporte = getServletContext().getRealPath("/reports/"
                                 + request.getParameter(Variables.NOMBRE_REPORTE) + "/");
@@ -239,11 +239,11 @@ public class ClienteController extends HttpServlet {
                             if (!StringUtils.isReallyEmptyOrNull(request.getParameter(Text.FORMATO_REPORTE))) {
                                 switch (request.getParameter(Text.FORMATO_REPORTE)) {
                                     case Variables.PDF:
-                                        ReporteFactory.newInstance().generarReporte(user, this.clienteBo.findAll(user), rutaServer,
+                                        ReporteFactory.newInstance().generarReporte(user, this.clienteBo.findAllClienteReporte(user), rutaServer,
                                                 rutaReporte, Variables.PDF, response);
                                         break;
                                     case Variables.EXCEL:
-                                        ReporteFactory.newInstance().generarReporte(user, this.clienteBo.findAll(user), rutaServer, rutaReporte, Variables.EXCEL, response);
+                                        ReporteFactory.newInstance().generarReporte(user, this.clienteBo.findAllClienteReporte(user), rutaServer, rutaReporte, Variables.EXCEL, response);
                                         break;
                                 }
                             }
@@ -564,7 +564,7 @@ public class ClienteController extends HttpServlet {
                 credito.setTipoCredito(Variables.MONETARIO.toUpperCase());
                 credito.setCantidadMonetaria(NumberUtils.stringToBigDecimal(
                         request.getParameter(Text.CREDITO_MONETARIO)
-                )
+                    )
                 );
             } else if (NumberUtils.stringToNumber(request.getParameter(Text.RDB_CREDITOM)) == 2) {
                 credito.setTipoCredito(Variables.CONTRA_NOTA.toUpperCase());
@@ -572,8 +572,26 @@ public class ClienteController extends HttpServlet {
                 credito.setTipoCredito(Variables.PLAZO.toUpperCase());
                 credito.setCantidadMonetaria(NumberUtils.stringToBigDecimal(
                         request.getParameter(Text.CREDITO_MONETARIO)
-                )
+                    )
                 );
+            }
+        } else {
+            if (!StringUtils.isReallyEmptyOrNull(request.getParameter(Text.RDB_CREDITO))) {
+                if (NumberUtils.stringToNumber(request.getParameter(Text.RDB_CREDITO)) == 1) {
+                    credito.setTipoCredito(Variables.MONETARIO.toUpperCase());
+                    credito.setCantidadMonetaria(NumberUtils.stringToBigDecimal(
+                            request.getParameter(Text.CREDITO_MONETARIO)
+                            )
+                    );
+                } else if (NumberUtils.stringToNumber(request.getParameter(Text.RDB_CREDITO)) == 2) {
+                    credito.setTipoCredito(Variables.CONTRA_NOTA.toUpperCase());
+                } else if (NumberUtils.stringToNumber(request.getParameter(Text.RDB_CREDITO)) == 3) {
+                    credito.setTipoCredito(Variables.PLAZO.toUpperCase());
+                    credito.setCantidadMonetaria(NumberUtils.stringToBigDecimal(
+                            request.getParameter(Text.CREDITO_MONETARIO)
+                        )
+                    );
+                }
             }
         }
         return credito;

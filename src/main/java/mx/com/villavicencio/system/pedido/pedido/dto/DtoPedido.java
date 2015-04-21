@@ -6,6 +6,7 @@ import mx.com.villavicencio.system.cliente.dto.DtoCliente;
 import mx.com.villavicencio.system.pedido.detalles.dto.DtoDetallePedido;
 import mx.com.villavicencio.system.productos.productos.dto.DtoProducto;
 import mx.com.villavicencio.system.vendedor.dto.DtoVendedor;
+import mx.com.villavicencio.system.venta.nota.dto.DtoNotaVenta;
 
 /**
  *
@@ -26,7 +27,7 @@ public class DtoPedido {
     private String strFecha;
     private DtoDetallePedido detalle;
     private Collection<DtoPedido> pedidos;
-    
+   
     public Integer getIdPedido() {
         return idPedido;
     }

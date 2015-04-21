@@ -13,7 +13,6 @@ import mx.com.villavicencio.system.credito.credito.dto.DtoCredito;
 import mx.com.villavicencio.system.credito.credito.factory.CreditoFactory;
 import mx.com.villavicencio.system.movimientos.abonos.bo.AbonosBo;
 import mx.com.villavicencio.system.movimientos.abonos.dto.DtoAbonos;
-import mx.com.villavicencio.system.movimientos.abonos.factory.AbonosFactory;
 import mx.com.villavicencio.system.movimientos.movimientos.bo.MovimientosBo;
 import mx.com.villavicencio.system.movimientos.movimientos.dto.DtoMovimientos;
 import mx.com.villavicencio.system.movimientos.movimientos.factory.MovimientosFactory;
@@ -26,7 +25,6 @@ import mx.com.villavicencio.system.venta.detalle.factory.DetalleNotaVentaFactory
 import mx.com.villavicencio.system.venta.devoluciones.detalle.dto.DtoDetalleDevoluciones;
 import mx.com.villavicencio.system.venta.nota.bo.NotaVentaBo;
 import mx.com.villavicencio.system.venta.nota.dto.DtoNotaVenta;
-import mx.com.villavicencio.system.venta.nota.factory.NotaVentaFactory;
 
 /**
  *
@@ -168,10 +166,16 @@ public class TablesUtils {
                         .append(movs.getNotaVenta().getFolio()).append("</td>")
                         .append("<td style='text-align: center'>Venta</td>")
                         .append("<td style='text-align: center'>").append(DateUtils.dateToString(movs.getNotaVenta().getFecha())).append("</td>")
-                        .append("<td style='text-align: center'>").append(movs.getNotaVenta().getStatusNotaVenta()).append("</td>")
-                        .append("<td style='text-align: center'><a href='").append(context).append("/controller/clienteController?method=6&txtIdCliente=").append(cliente.getIdCliente())
-                        .append("&txtIdNotaVenta=").append(movs.getNotaVenta().getIdNotaVenta()).append("' target='_blank'><img src='").append(context).append("/image/report.png' width='32' height='32'")
-                        .append("title='Ver Detalle' name='detalleNota' style='image-orientation: left;'/></a></td>");
+                        .append("<td style='text-align: center'>").append(movs.getNotaVenta().getStatusNotaVenta()).append("</td>");
+                if (movs.getNotaVenta().getIdNotaVenta() != null) {
+                    content.append("<td style='text-align: center'><a href='").append(context).append("/controller/notaVentaController?method=2&txtIdNotaVenta=").append(movs.getNotaVenta().getIdNotaVenta())
+                            .append("&reportName=notaVenta' target='_blank'><img src='").append(context).append("/image/report.png' width='32' height='32'")
+                            .append("title='Ver Detalle Nota Venta' name='detalleNota' style='image-orientation: left;'/></a></td>");
+                } else {
+                    content.append("<td style='text-align: center'><a href='").append(context).append("/controller/pedidosController?method=10")
+                            .append("&txtIdPedido=").append(movs.getPedido().getIdPedido()).append("&reportName=pedidos' target='_blank'><img src='").append(context).append("/image/report.png' width='32' height='32'")
+                            .append("title='Ver Detalle Pedido' name='detalleNota' style='image-orientation: left;'/></a></td>");
+                }
                 if ((totalFaltante.compareTo(BigDecimal.ZERO) == 0) && (totalAbonado.compareTo(BigDecimal.ZERO) != 0)) {
                     if (movs.getNotaVenta().getStatusNotaVenta() != 'L') {
                         content.append("<td style='text-align: center'><input type='button' id='btnLiquidar' name='btnLiquidar' value='Liquidar' onClick='liquidar(")
@@ -191,11 +195,17 @@ public class TablesUtils {
                         .append(movs.getPedido().getFolio()).append("</td>")
                         .append("<td style='text-align: center'>Pedido</td>")
                         .append("<td style='text-align: center'>").append(DateUtils.dateToString(movs.getPedido().getFecha())).append("</td>")
-                        .append("<td style='text-align: center'>").append(movs.getPedido().getStatusAlmacen()).append("</td>")
-                        .append("<td style='text-align: center'><a href='").append(context).append("/controller/clienteController?method=6&txtIdCliente=").append(cliente.getIdCliente())
-                        .append("&txtIdPedido=").append(movs.getPedido().getIdPedido()).append("' target='_blank'><img src='").append(context).append("/image/report.png' width='32' height='32'")
-                        .append("title='Ver Detalle' name='detallePedido' style='image-orientation: left;'/></a></td>")
-                        .append("<td style='text-align: center'><input type='button' id='btnAbonos' name='btnAbonos' value='Abonar' disabled='disabled' /></td>")
+                        .append("<td style='text-align: center'>").append(movs.getPedido().getStatusAlmacen()).append("</td>");
+                if (movs.getNotaVenta().getIdNotaVenta() != null) {
+                    content.append("<td style='text-align: center'><a href='").append(context).append("/controller/notaVentaController?method=2&txtIdNotaVenta=").append(movs.getNotaVenta().getIdNotaVenta())
+                            .append("&reportName=notaVenta' target='_blank'><img src='").append(context).append("/image/report.png' width='32' height='32'")
+                            .append("title='Ver Detalle Nota Venta' name='detalleNota' style='image-orientation: left;'/></a></td>");
+                } else {
+                    content.append("<td style='text-align: center'><a href='").append(context).append("/controller/pedidosController?method=10")
+                            .append("&txtIdPedido=").append(movs.getPedido().getIdPedido()).append("&reportName=pedidos' target='_blank'><img src='").append(context).append("/image/report.png' width='32' height='32'")
+                            .append("title='Ver Detalle Pedido' name='detalleNota' style='image-orientation: left;'/></a></td>");
+                }
+                content.append("<td style='text-align: center'><input type='button' id='btnAbonos' name='btnAbonos' value='Abonar' disabled='disabled' /></td>")
                         .append("</tr>");
             }
         }
@@ -259,10 +269,17 @@ public class TablesUtils {
                         .append(movs.getNotaVenta().getFolio()).append("</td>")
                         .append("<td style='text-align: center'>Venta</td>")
                         .append("<td style='text-align: center'>").append(DateUtils.dateToString(movs.getNotaVenta().getFecha())).append("</td>")
-                        .append("<td style='text-align: center'>").append(movs.getNotaVenta().getStatusNotaVenta()).append("</td>")
-                        .append("<td style='text-align: center'><a href='").append(context).append("/controller/clienteController?method=6&txtIdCliente=").append(vendedor.getIdVendedor())
-                        .append("&txtIdNotaVenta=").append(movs.getNotaVenta().getIdNotaVenta()).append("' target='_blank'><img src='").append(context).append("/image/report.png' width='32' height='32'")
-                        .append("title='Ver Detalle' name='detalleNota' style='image-orientation: left;'/></a></td>");
+                        .append("<td style='text-align: center'>").append(movs.getNotaVenta().getStatusNotaVenta()).append("</td>");
+                if (movs.getNotaVenta().getIdNotaVenta() != null) {
+                    content.append("<td style='text-align: center'><a href='").append(context).append("/controller/notaVentaController?method=2&txtIdNotaVenta=").append(movs.getNotaVenta().getIdNotaVenta())
+                            .append("&reportName=notaVenta' target='_blank'><img src='").append(context).append("/image/report.png' width='32' height='32'")
+                            .append("title='Ver Detalle Nota Venta' name='detalleNota' style='image-orientation: left;'/></a></td>");
+                } else {
+                    content.append("<td style='text-align: center'><a href='").append(context).append("/controller/pedidosController?method=10")
+                            .append("&txtIdPedido=").append(movs.getPedido().getIdPedido()).append("&reportName=pedidos' target='_blank'><img src='").append(context).append("/image/report.png' width='32' height='32'")
+                            .append("title='Ver Detalle Pedido' name='detalleNota' style='image-orientation: left;'/></a></td>");
+                }
+
                 if ((totalFaltante.compareTo(BigDecimal.ZERO) == 0) && (totalAbonado.compareTo(BigDecimal.ZERO) != 0)) {
                     if (movs.getNotaVenta().getStatusNotaVenta() != 'L') {
                         content.append("<td style='text-align: center'><input type='button' id='btnLiquidar' name='btnLiquidar' value='Liquidar' onClick='liquidar(")
@@ -282,11 +299,18 @@ public class TablesUtils {
                         .append(movs.getPedido().getFolio()).append("</td>")
                         .append("<td style='text-align: center'>Pedido</td>")
                         .append("<td style='text-align: center'>").append(DateUtils.dateToString(movs.getPedido().getFecha())).append("</td>")
-                        .append("<td style='text-align: center'>").append(movs.getPedido().getStatusAlmacen()).append("</td>")
-                        .append("<td style='text-align: center'><a href='").append(context).append("/controller/clienteController?method=6&txtIdCliente=").append(vendedor.getIdVendedor())
-                        .append("&txtIdPedido=").append(movs.getPedido().getIdPedido()).append("' target='_blank'><img src='").append(context).append("/image/report.png' width='32' height='32'")
-                        .append("title='Ver Detalle' name='detallePedido' style='image-orientation: left;'/></a></td>")
-                        .append("<td style='text-align: center'><input type='button' id='btnAbonos' name='btnAbonos' value='Abonar' disabled='disabled' /></td>")
+                        .append("<td style='text-align: center'>").append(movs.getPedido().getStatusAlmacen()).append("</td>");
+                if (movs.getNotaVenta().getIdNotaVenta() != null) {
+                    content.append("<td style='text-align: center'><a href='").append(context).append("/controller/notaVentaController?method=2&txtIdNotaVenta=").append(movs.getNotaVenta().getIdNotaVenta())
+                            .append("&reportName=notaVenta' target='_blank'><img src='").append(context).append("/image/report.png' width='32' height='32'")
+                            .append("title='Ver Detalle Nota Venta' name='detalleNota' style='image-orientation: left;'/></a></td>");
+                } else {
+                    content.append("<td style='text-align: center'><a href='").append(context).append("/controller/pedidosController?method=10")
+                            .append("&txtIdPedido=").append(movs.getPedido().getIdPedido()).append("&reportName=pedidos' target='_blank'><img src='").append(context).append("/image/report.png' width='32' height='32'")
+                            .append("title='Ver Detalle Pedido' name='detalleNota' style='image-orientation: left;'/></a></td>");
+                }
+
+                content.append("<td style='text-align: center'><input type='button' id='btnAbonos' name='btnAbonos' value='Abonar' disabled='disabled' /></td>")
                         .append("</tr>");
             }
         }
@@ -348,39 +372,45 @@ public class TablesUtils {
                 .append("<tbody><tr><td><strong>TIPO CR&Eacute;DITO :</strong> ");
         DtoCredito credito = getCredito(notaVenta);
         if (credito != null) {
-
-            sb.append(credito.getTipoCredito()).append(" </td><td><strong>ESTATUS CR&Eacute;DITO : </strong>").append(
-                    ("A".equals(credito.getEstatusCredito()) ? "VIGENTE" : ("V".equals(credito.getEstatusCredito()) ? "VENCIDO" : "SIN APLICAR"))).append("</td></tr>")
-                    .append("<tr><td><strong> FECHA REGISTRO : </strong>").append(DateUtils.dateToString(credito.getFechaRegistro())).append("</td>");
-            if (credito.getTipoCredito().equals(Variables.PLAZO.toUpperCase())) {
-                sb.append(" <td><br><strong>FECHA LIMITE : </strong>").append(credito.getFechaPago()).append("</td></tr>");
-                if (credito.getFolioNota() != null) {
-                    sb.append("<tr><td colspan='2'><strong>NO NOTAS  :</strong> ").append(credito.getFolioNota()).append("</td></tr>");
+            if (credito.getIdCredito() != null) {
+                sb.append(credito.getTipoCredito());
+                if (!StringUtils.isReallyEmptyOrNull(credito.getEstatusCredito())) {
+                    sb.append(" </td><td><strong>ESTATUS CR&Eacute;DITO : </strong>").append(
+                            ("A".equals(credito.getEstatusCredito()) ? "VIGENTE" : ("V".equals(credito.getEstatusCredito()) ? "VENCIDO" : "SIN APLICAR"))).append("</td></tr>")
+                            .append("<tr><td><strong> FECHA REGISTRO : </strong>").append(DateUtils.dateToString(credito.getFechaRegistro())).append("</td>");
+                    if (credito.getTipoCredito().equals(Variables.PLAZO.toUpperCase())) {
+                        sb.append(" <td><br><strong>FECHA LIMITE : </strong>").append(credito.getFechaPago()).append("</td></tr>");
+                        if (credito.getFolioNota() != null) {
+                            sb.append("<tr><td colspan='2'><strong>NO NOTAS  :</strong> ").append(credito.getFolioNota()).append("</td></tr>");
+                        }
+                    } else if (credito.getTipoCredito().equals(Variables.CONTRA_NOTA.toUpperCase())) {
+                        if (credito.getFolioNota() != null) {
+                            sb.append("<tr><td><strong>NO NOTA : </strong>").append(credito.getFolioNota()).append("</td></tr>");
+                        }
+                    } else if (credito.getTipoCredito().equals(Variables.MONETARIO.toUpperCase())) {
+                        if (credito.getFolioNota() != null) {
+                            sb.append("<tr><td><strong> NO NOTAS : </strong>").append(credito.getFolioNota()).append("</td></tr>");
+                        }
+                    }
                 }
-            } else if (credito.getTipoCredito().equals(Variables.CONTRA_NOTA.toUpperCase())) {
-                if (credito.getFolioNota() != null) {
-                    sb.append("<tr><td><strong>NO NOTA : </strong>").append(credito.getFolioNota()).append("</td></tr>");
-                }
-            } else if (credito.getTipoCredito().equals(Variables.MONETARIO.toUpperCase())) {
-                if (credito.getFolioNota() != null) {
-                    sb.append("<tr><td><strong> NO NOTAS : </strong>").append(credito.getFolioNota()).append("</td></tr>");
-                }
-            }
-            if (!"A".equals(credito.getEstatusCredito())) {
-                sb.append("<tr><td><strong>LIMITE CR&Eacute;DITO :</strong> <label id='lblLimiteCredito'>").append(credito.getCantidadMonetaria()).append("</label>").append("</td>")
-                        .append("<td><strong>CR&Eacute;DITO DISPONIBLE : </strong><label id='lblCreditoUsado'>").append(getCreditoActual(notaVenta, credito)).append("</label>").append("</td></tr>");
-                if (DateUtils.dateToString(notaVenta.getFecha()).equals(DateUtils.dateToString(DateUtils.dateNow()))) {
-                    sb.append("<tr><td colspan='2'><center><input type='button' id='btnAplicar' name='btnAplicar' onClick='aplicarCredito(\"")
-                            .append(credito.getTipoCredito()).append("\",\"").append(notaVenta.getFolio()).append("\",").append(credito.getIdCredito())
-                            .append(",").append(notaVenta.getIdNotaVenta())
-                            .append(");' value='Aplicar Cr&eacute;dito' /></center>").append("</td></tr></tbody></table></div>");
+                if ((credito.getEstatusCredito() == null) || (!"A".equals(credito.getEstatusCredito()))) {
+                    sb.append("<tr><td><strong>LIMITE CR&Eacute;DITO :</strong> <label id='lblLimiteCredito'>").append(credito.getCantidadMonetaria()).append("</label>").append("</td>")
+                            .append("<td><strong>CR&Eacute;DITO DISPONIBLE : </strong><label id='lblCreditoUsado'>").append(getCreditoActual(notaVenta, credito)).append("</label>").append("</td></tr>");
+                    if (DateUtils.dateToString(notaVenta.getFecha()).equals(DateUtils.dateToString(DateUtils.dateNow()))) {
+                        sb.append("<tr><td colspan='2'><center><input type='button' id='btnAplicar' name='btnAplicar' onClick='aplicarCredito(\"")
+                                .append(credito.getTipoCredito()).append("\",\"").append(notaVenta.getFolio()).append("\",").append(credito.getIdCredito())
+                                .append(",").append(notaVenta.getIdNotaVenta())
+                                .append(");' value='Aplicar Cr&eacute;dito' /></center>").append("</td></tr></tbody></table></div>");
+                    } else {
+                        sb.append("</tbody></table></div>");
+                    }
                 } else {
-                    sb.append("</tbody></table></div>");
+                    sb.append("<tr><td><strong>LIMITE CR&Eacute;DITO : </strong><label id='lblLimiteCredito'>").append(credito.getCantidadMonetaria()).append("</label>").append("</td>")
+                            .append("<td><strong><label id='lblNegativo'>CR&Eacute;DITO DISPONIBLE : </label></strong><label id='lblCreditoUsado'>").append(getCreditoActual(notaVenta, credito)).append("</label>").append("</td></tr>")
+                            .append("<tr><td colspan='2' style=' text-align: center; width:25px;'><center><input type='button' id='btnAplicar' name='btnAplicar' value='Cr&eacute;dito Aplicado' disabled='disabled'/></center>").append("</td></tr></tbody></table></div>");
                 }
             } else {
-                sb.append("<tr><td><strong>LIMITE CR&Eacute;DITO : </strong><label id='lblLimiteCredito'>").append(credito.getCantidadMonetaria()).append("</label>").append("</td>")
-                        .append("<td><strong><label id='lblNegativo'>CR&Eacute;DITO DISPONIBLE : </label></strong><label id='lblCreditoUsado'>").append(getCreditoActual(notaVenta, credito)).append("</label>").append("</td></tr>")
-                        .append("<tr><td colspan='2' style=' text-align: center; width:25px;'><center><input type='button' id='btnAplicar' name='btnAplicar' value='Cr&eacute;dito Aplicado' disabled='disabled'/></center>").append("</td></tr></tbody></table></div>");
+                sb.append("<tr><td colspan='2' style=' text-align: center; width:25px;'>Sin C&eacute;dito</center>").append("</td></tr></tbody></table></div><br/><br/><br/>");
             }
         }
 
@@ -491,71 +521,82 @@ public class TablesUtils {
         BigDecimal cargoCredito;
         DtoCredito cred = creditoBo.findById(user, credito);
         Integer idAbonoAnterior = 0;
-        if (cred.getFolioNota().contains(",")) {
-            cargoCredito = BigDecimal.ZERO;
-            for (DtoNotaVenta notas : notaVentaBo.findAll(user)) {
-                notas.setDetalles(detalleNotaVentaBo.findAll(user, DetalleNotaVentaFactory.newInstance(notas.getIdNotaVenta())));
-                for (String str : StringUtils.split(cred.getFolioNota())) {
-                    if (notas.getFolio().equals(str)) {
-                        for (DtoDetalleNotaVenta detalles : notas.getDetalles()) {
-                            cargoCredito = cargoCredito.add(detalles.getSubTotal());
-                        }
-                        for (DtoMovimientos movs : object.getMovimientos()) {
-                            if (notas.getFolio().equals(str)) {
-                                cargo = cargo.add(movs.getCargos().getCargo());
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-            for (String str : StringUtils.split(cred.getFolioNota())) {
+        if (cred.getFolioNota() != null) {
+            if (cred.getFolioNota().contains(",")) {
+                cargoCredito = BigDecimal.ZERO;
                 for (DtoNotaVenta notas : notaVentaBo.findAll(user)) {
-                    if (notas.getFolio().equals(str)) {
-                        DtoMovimientos movimientos = MovimientosFactory.newInstance();
-                        movimientos.setNotaVenta(notas);
-                        for (DtoMovimientos movs : movimientosBo.findAll(user, movimientos)) {
-                            movs.setAbonos(abonosBo.findById(user, movs.getAbonos()));
-                            if (movs.getAbonos().getIdAbonos() != null) {
-                                if (!Objects.equals(idAbonoAnterior, movs.getAbonos().getIdAbonos())) {
-                                    abonoCredito = abonoCredito.add(movs.getAbonos().getAbono());
-                                    idAbonoAnterior = movs.getAbonos().getIdAbonos();
+                    notas.setDetalles(detalleNotaVentaBo.findAll(user, DetalleNotaVentaFactory.newInstance(notas.getIdNotaVenta())));
+                    for (String str : StringUtils.split(cred.getFolioNota())) {
+                        if (notas.getFolio().equals(str)) {
+                            for (DtoDetalleNotaVenta detalles : notas.getDetalles()) {
+                                cargoCredito = cargoCredito.add(detalles.getSubTotal());
+                            }
+                            for (DtoMovimientos movs : object.getMovimientos()) {
+                                if (notas.getFolio().equals(str)) {
+                                    if (movs.getDevoluciones().getIdDevoluciones() != null) {
+                                        cargoCredito = movs.getCargos().getCargo();
+                                    }
+                                    cargo = cargo.add(movs.getCargos().getCargo());
+                                    break;
                                 }
                             }
                         }
                     }
                 }
-            }
-            cargoCredito = credito.getCantidadMonetaria().subtract(cargoCredito);
-            creditoActual = new BigDecimal(new DecimalFormat("######.00").format(cargoCredito.add(abonoCredito)));
-        } else {
-            cargoCredito = BigDecimal.ZERO;
-            for (DtoNotaVenta notas : notaVentaBo.findAll(user)) {
-                notas.setDetalles(detalleNotaVentaBo.findAll(user, DetalleNotaVentaFactory.newInstance(notas.getIdNotaVenta())));
-                if (notas.getFolio().equals(object.getFolio())) {
-                    for (DtoDetalleNotaVenta detalles : notas.getDetalles()) {
-                        cargoCredito = cargoCredito.add(detalles.getSubTotal());
-                    }
-                    for (DtoMovimientos movs : object.getMovimientos()) {
-                        if (notas.getFolio().equals(object.getFolio())) {
-                            cargo = cargo.add(movs.getCargos().getCargo());
-                            break;
-                        }
-                    }
-                    for (DtoMovimientos movs : object.getMovimientos()) {
-                        if (Objects.equals(object.getIdNotaVenta(), movs.getNotaVenta().getIdNotaVenta())) {
-                            if (movs.getAbonos().getIdAbonos() != null) {
-                                abonoCredito = abonoCredito.add(movs.getAbonos().getAbono());
+                for (String str : StringUtils.split(cred.getFolioNota())) {
+                    for (DtoNotaVenta notas : notaVentaBo.findAll(user)) {
+                        if (notas.getFolio().equals(str)) {
+                            DtoMovimientos movimientos = MovimientosFactory.newInstance();
+                            movimientos.setNotaVenta(notas);
+                            for (DtoMovimientos movs : movimientosBo.findAll(user, movimientos)) {
+                                movs.setAbonos(abonosBo.findById(user, movs.getAbonos()));
+                                if (movs.getAbonos().getIdAbonos() != null) {
+                                    if (!Objects.equals(idAbonoAnterior, movs.getAbonos().getIdAbonos())) {
+                                        abonoCredito = abonoCredito.add(movs.getAbonos().getAbono());
+                                        idAbonoAnterior = movs.getAbonos().getIdAbonos();
+                                    }
+                                }
                             }
                         }
                     }
                 }
+                cargoCredito = credito.getCantidadMonetaria().subtract(cargoCredito);
+                creditoActual = new BigDecimal(new DecimalFormat("######.00").format(cargoCredito.add(abonoCredito)));
+            } else {
+                cargoCredito = BigDecimal.ZERO;
+                for (DtoNotaVenta notas : notaVentaBo.findAll(user)) {
+                    notas.setDetalles(detalleNotaVentaBo.findAll(user, DetalleNotaVentaFactory.newInstance(notas.getIdNotaVenta())));
+                    if (notas.getFolio().equals(object.getFolio())) {
+                        for (DtoDetalleNotaVenta detalles : notas.getDetalles()) {
+                            cargoCredito = cargoCredito.add(detalles.getSubTotal());
+                        }
+
+                        for (DtoMovimientos movs : object.getMovimientos()) {
+                            if (notas.getFolio().equals(object.getFolio())) {
+                                if (movs.getDevoluciones().getIdDevoluciones() != null) {
+                                    cargoCredito = movs.getCargos().getCargo();
+                                }
+                                cargo = cargo.add(movs.getCargos().getCargo());
+                                break;
+                            }
+                        }
+                        for (DtoMovimientos movs : object.getMovimientos()) {
+                            if (Objects.equals(object.getIdNotaVenta(), movs.getNotaVenta().getIdNotaVenta())) {
+                                if (movs.getAbonos().getIdAbonos() != null) {
+                                    abonoCredito = abonoCredito.add(movs.getAbonos().getAbono());
+                                }
+                            }
+                        }
+                    }
+                }
+                cargoCredito = credito.getCantidadMonetaria().subtract(cargoCredito);
+                creditoActual = new BigDecimal(new DecimalFormat("######.00").format(cargoCredito.add(abonoCredito)));
             }
-            cargoCredito = credito.getCantidadMonetaria().subtract(cargoCredito);
-            creditoActual = new BigDecimal(new DecimalFormat("######.00").format(cargoCredito.add(abonoCredito)));
-        }
-        if (creditoActual.compareTo(cred.getCantidadMonetaria()) == 0) {
-            updateCredito(cred);
+            if (creditoActual.compareTo(cred.getCantidadMonetaria()) == 0) {
+                updateCredito(cred);
+            }
+        } else {
+            creditoActual = cred.getCantidadMonetaria();
         }
         return creditoActual;
     }

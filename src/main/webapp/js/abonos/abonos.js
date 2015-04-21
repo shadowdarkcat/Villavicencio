@@ -263,6 +263,7 @@ function getDataCliente(idCliente) {
                 , ajax: true
             }
             , success: function (response) {
+                $('#tblDetallesMovimiento').empty();
                 var noInterior = ' ';
                 var empresa = response.empresa + ' ' + response.razonSocial;
                 var rfc = (response.rfc != null ? response.rfc : 'NO APLICA');

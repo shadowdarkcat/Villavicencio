@@ -117,11 +117,12 @@ public class PedidoBoImpl implements PedidoBo {
                 detalle.setComision(NumberUtils.convertPorcentajeToNumber(detalle.getComision()));
                 collection.add(this.detalleBo.findById(user, detalle));
                 if ((detalles.getIdCliente() != null) && (detalles.getIdCliente() != 0)) {
-                    if (object.getCliente() == null) {                        
+                    if (object.getCliente() == null) {
                         object.setCliente(ClienteFactory.newInstance(detalles.getIdCliente()));
                     }
                     object.setCliente(this.clienteBo.findById(user, object.getCliente()));
                 } else if ((detalles.getIdVendedor() != null) && (detalles.getIdVendedor() != 0)) {
+                    object.setVendedor(VendedorFactory.newInstance());
                     object.getVendedor().setIdVendedor(detalles.getIdVendedor());
                     object.setVendedor(this.vendedorBo.findById(user, object.getVendedor()));
                 }
@@ -213,6 +214,53 @@ public class PedidoBoImpl implements PedidoBo {
         pedido.setFolio(this.pedidoDao.createFolio());
         pedido.setStrFecha(DateUtils.dateToString(DateUtils.dateNow()));
         return pedido;
+    }
+
+    @Override
+    public DtoPedido findPedidoReporteById(DtoUsuario user, DtoPedido object) {
+        if ((user.getIdUsuario() != 0) && (user != null)) {
+            Collection<DtoDetallePedido> collection = new ArrayList<>();
+            DtoDetallePedido detalle;
+            object = this.pedidoDao.findById(object);
+            DtoDatosPedido datos = DatosPedidoFactory.newInstance();
+            datos.setIdPedido(object.getIdPedido());
+            Collection<DtoDatosPedido> findDatosById = this.datosBo.findDatosById(user, datos);
+            for (DtoDatosPedido detalles : findDatosById) {
+                detalle = DetallePedidoFactory.newInstance(detalles.getIdDetallePedido());
+                detalle.setComision(NumberUtils.convertPorcentajeToNumber(detalle.getComision()));
+                collection.add(this.detalleBo.findById(user, detalle));
+                if ((detalles.getIdCliente() != null) && (detalles.getIdCliente() != 0)) {
+                    if (object.getCliente() == null) {
+                        object.setCliente(ClienteFactory.newInstance(detalles.getIdCliente()));
+                    }
+                    object.setCliente(this.clienteBo.findById(user, object.getCliente()));
+                } else if ((detalles.getIdVendedor() != null) && (detalles.getIdVendedor() != 0)) {
+                    object.setVendedor(VendedorFactory.newInstance());
+                    object.getVendedor().setIdVendedor(detalles.getIdVendedor());
+                    object.setVendedor(this.vendedorBo.findById(user, object.getVendedor()));
+                }
+            }
+            object.setDetalles(collection);
+            return object;
+        } else {
+            ApplicationMessages.errorMessage(PropertiesBean.getErrorFile().getProperty(Property.ACCESO_DENEGADO));
+            throw new ApplicationException(PropertiesBean.getErrorFile().getProperty(Property.ACCESO_DENEGADO));
+        }
+    }
+
+    @Override
+    public Collection<DtoPedido> findAllPedidoReporte(DtoUsuario user) {
+        if ((user.getIdUsuario() != 0) && (user != null)) {
+            Collection<DtoPedido> collection = new ArrayList<>();
+            for (DtoPedido pedidos : this.pedidoDao.findAll()) {                
+                DtoPedido pedido = this.findPedidoReporteById(user, pedidos);
+                collection.add(pedido);
+            }
+            return collection;
+        } else {
+            ApplicationMessages.errorMessage(PropertiesBean.getErrorFile().getProperty(Property.ACCESO_DENEGADO));
+            throw new ApplicationException(PropertiesBean.getErrorFile().getProperty(Property.ACCESO_DENEGADO));
+        }
     }
 
     public void setPedidoDao(PedidoDao pedidoDao) {

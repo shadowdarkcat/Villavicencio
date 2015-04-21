@@ -27,7 +27,7 @@
         <servlet-class>mx.com.villavicencio.system.productos.productos.controller.ProductoController</servlet-class>
         <init-param>
             <param-name>PATH</param-name>
-            <param-value>C:\\apache-tomcat-8.0.18\\webapps\\Villavicencio\\images</param-value>
+            <param-value>C:\\Apache Software Foundation\\Tomcat 8.0\\webapps\\Villavicencio\\images</param-value>
         </init-param>
     </servlet>
     <servlet>
@@ -61,6 +61,10 @@
     <servlet>
         <servlet-name>CreditoController</servlet-name>
         <servlet-class>mx.com.villavicencio.system.credito.credito.controller.CreditoController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>NotaVentaController</servlet-name>
+        <servlet-class>mx.com.villavicencio.system.venta.nota.controller.NotaVentaController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ProductoController</servlet-name>
@@ -97,6 +101,10 @@
     <servlet-mapping>
         <servlet-name>CreditoController</servlet-name>
         <url-pattern>/controller/creditoController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>NotaVentaController</servlet-name>
+        <url-pattern>/controller/notaVentaController</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

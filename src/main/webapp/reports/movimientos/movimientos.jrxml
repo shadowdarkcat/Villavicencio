@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="movimientos" pageWidth="892" pageHeight="842" whenNoDataType="NoDataSection" columnWidth="852" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="23856813-201c-4dbc-8135-a85eac168641">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="PATH_IMAGENES" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String"/>
+	<parameter name="SALDO_DISPONIBLE" class="java.math.BigDecimal"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="movimientos" class="java.util.Collection">
+		<fieldDescription><![CDATA[movimientos]]></fieldDescription>
+	</field>
+	<detail>
+		<band height="802" splitType="Stretch">
+			<subreport>
+				<reportElement x="0" y="0" width="852" height="802" uuid="6f3879f9-484b-49db-a5af-b4919f835b54"/>
+				<subreportParameter name="SALDO_DISPONIBLE">
+					<subreportParameterExpression><![CDATA[$P{SALDO_DISPONIBLE}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="PATH_IMAGENES">
+					<subreportParameterExpression><![CDATA[$P{PATH_IMAGENES}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{movimientos})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "subMovimientos.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<noData>
+		<band height="119">
+			<staticText>
+				<reportElement x="11" y="99" width="849" height="20" uuid="6cfdc950-0ba1-43eb-89ff-00eb5d5e3b08"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[NO SE HA GENERADO LA NOTA DE VENTA EL PEDIDO FUE CANCELADO O SU ESTADO ES PENDIENTE]]></text>
+			</staticText>
+			<image>
+				<reportElement x="10" y="20" width="80" height="79" uuid="c0f4185b-0262-4530-875e-c0a2aee7d299"/>
+				<imageExpression><![CDATA[$P{PATH_IMAGENES} + "logo.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="10" y="10" width="852" height="30" uuid="97f11a7d-441c-4b4c-bbb0-07d89402ef17"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[REPORTE MOVIMIENTOS ]]></text>
+			</staticText>
+		</band>
+	</noData>
+</jasperReport>

@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import javax.servlet.RequestDispatcher;
@@ -326,6 +327,33 @@ public class LiquidacionController extends HttpServlet {
                     collection.add(detalle);
                     break;
                 }
+            }
+        }
+
+        if (!nota.getMovimiento().getDevoluciones().getDetalles().isEmpty()) {
+            if (nota.getMovimiento().getDevoluciones().getDetalles().size() != notaVenta.getDetalles().size()) {
+                Collection<DtoDetalleDevoluciones> collectionDevolucion = new ArrayList<>();
+                DtoDevoluciones devolucion = DevolucionesFactory.newInstance();
+                DtoMovimientos movimientos = MovimientosFactory.newInstance();
+                DtoDetalleDevoluciones devoluciones = null;
+                for (DtoDetalleNotaVenta detalleNota : notaVenta.getDetalles()) {
+                    for (DtoDetalleDevoluciones detalleDevolucion : nota.getMovimiento().getDevoluciones().getDetalles()) {
+                        if (detalleNota.getNombreProducto().equals(detalleDevolucion.getNombreProducto())) {
+                            devoluciones = detalleDevolucion;
+                            collectionDevolucion.add(devoluciones);
+                        } else {
+                            devoluciones = DetalleDevolucionesFactory.newInstance();
+                            devoluciones.setCantidadKilos(BigDecimal.ZERO);
+                            devoluciones.setCantidadPiezas(GenericTypes.ZERO);
+                            devoluciones.setCosto(detalleNota.getCostoUnitario());
+                            collectionDevolucion.add(devoluciones);
+                        }
+
+                    }
+                }
+                devolucion.setDetalles(collectionDevolucion);
+                movimientos.setDevoluciones(devolucion);
+                nota.setMovimiento(movimientos);
             }
         }
         nota.setDetalles(collection);

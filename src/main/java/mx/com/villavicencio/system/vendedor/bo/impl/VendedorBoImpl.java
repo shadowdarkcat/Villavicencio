@@ -189,7 +189,6 @@ public class VendedorBoImpl implements VendedorBo {
                     this.datosBo.productoEstablecidoVendedor(user, object, productos);
                 } else {
                     object.setOpcion(GenericTypes.INSERT);
-                    productos = this.productoBo.insertPersonalizado(user, productos);
                     this.datosBo.productoEstablecidoVendedor(user, object, productos);
                 }
                 object.setOpcion(localOpcion);

@@ -9,11 +9,13 @@ import mx.com.villavicencio.properties.PropertiesBean;
 import mx.com.villavicencio.properties.Property;
 import mx.com.villavicencio.system.cliente.bo.ClienteBo;
 import mx.com.villavicencio.system.cliente.dto.DtoCliente;
+import mx.com.villavicencio.system.credito.credito.bo.CreditoBo;
 import mx.com.villavicencio.system.credito.credito.factory.CreditoFactory;
 import mx.com.villavicencio.system.movimientos.abonos.bo.AbonosBo;
 import mx.com.villavicencio.system.movimientos.abonos.dao.AbonosDao;
 import mx.com.villavicencio.system.movimientos.abonos.dto.DtoAbonos;
 import mx.com.villavicencio.system.movimientos.abonos.factory.AbonosFactory;
+import mx.com.villavicencio.system.movimientos.bancos.bo.BancosBo;
 import mx.com.villavicencio.system.movimientos.cargos.bo.CargosBo;
 import mx.com.villavicencio.system.movimientos.cargos.factory.CargosFactory;
 import mx.com.villavicencio.system.movimientos.movimientos.bo.MovimientosBo;
@@ -50,11 +52,13 @@ public class AbonosBoImpl implements AbonosBo {
     private VendedorBo vendedorBo;
     private CargosBo cargosBo;
     private DevolucionesBo devolucionesBo;
+    private BancosBo bancosBo;
+    private CreditoBo creditoBo;
 
     public AbonosBoImpl() {
         TablesUtils.setAbonosBo(this);
     }
-    
+
     @Override
     public Collection<DtoCliente> findAllClientes(DtoUsuario user) {
         if ((user != null) && (user.getIdUsuario() != 0)) {
@@ -131,8 +135,7 @@ public class AbonosBoImpl implements AbonosBo {
                     DtoPedido pedido = PedidoFactory.newInstance(pedidos.getIdPedido());
                     pedido.setCliente(object);
                     pedido = pedidoBo.findById(user, pedido);
-                    DtoNotaVenta notaVenta = NotaVentaFactory.newInstance();
-                    notaVenta = notaVentaBo.findByIdPedido(user, pedido);
+                    DtoNotaVenta notaVenta = notaVentaBo.findByIdPedido(user, pedido);
 
                     DtoMovimientos movimientos = MovimientosFactory.newInstance();
                     movimientos.setNotaVenta(notaVenta);
@@ -145,7 +148,7 @@ public class AbonosBoImpl implements AbonosBo {
                             collection.add(movs);
                             idAnteriorVenta = notaVenta.getIdNotaVenta();
                         }
-                        
+
                         if ((movs.getAbonos() != null) && (movs.getAbonos().getIdAbonos() != null)) {
                             movs.setAbonos(findById(user, movs.getAbonos()));
                             collection.add(movs);
@@ -267,8 +270,8 @@ public class AbonosBoImpl implements AbonosBo {
                         movimientos.setCredito(CreditoFactory.newInstance());
                     }
                 }
-                if ((movs.getDevoluciones()!= null) && (movs.getDevoluciones().getIdDevoluciones()!= null)) {
-                    if (movs.getDevoluciones().getIdDevoluciones()== 0) {
+                if ((movs.getDevoluciones() != null) && (movs.getDevoluciones().getIdDevoluciones() != null)) {
+                    if (movs.getDevoluciones().getIdDevoluciones() == 0) {
                         movimientos.setDevoluciones(DevolucionesFactory.newInstance());
                     }
                 }
@@ -278,7 +281,7 @@ public class AbonosBoImpl implements AbonosBo {
             movimientos.setOpcion(object.getOpcion());
             if (movimientos.getAbonos().getAbono() != null) {
                 movimientos.getAbonos().setAbonoAnterior(movimientos.getAbonos().getAbono());
-            } 
+            }
             movimientosBo.ingresar(user, movimientos);
         } else {
             ApplicationMessages.errorMessage(PropertiesBean.getErrorFile().getProperty(Property.ACCESO_DENEGADO));
@@ -304,6 +307,76 @@ public class AbonosBoImpl implements AbonosBo {
         if ((user != null) && (user.getIdUsuario() != 0)) {
             ApplicationMessages.errorMessage(PropertiesBean.getErrorFile().getProperty(Property.NO_DESARROLLADO));
             throw new ApplicationException(PropertiesBean.getErrorFile().getProperty(Property.NO_DESARROLLADO));
+        } else {
+            ApplicationMessages.errorMessage(PropertiesBean.getErrorFile().getProperty(Property.ACCESO_DENEGADO));
+            throw new ApplicationException(PropertiesBean.getErrorFile().getProperty(Property.ACCESO_DENEGADO));
+        }
+    }
+
+    @Override
+    public Collection<DtoMovimientos> findMovimientosReportByCliente(DtoUsuario user, DtoCliente object) {
+        if ((user != null) && (user.getIdUsuario() != 0)) {
+            Integer idAnteriorPedido = 0;
+            Collection<DtoMovimientos> collection = new ArrayList<>();
+            object = this.clienteBo.findById(user, object);
+            DtoDatosPedido datosPedido = DatosPedidoFactory.newInstance();
+            datosPedido.setIdCliente(object.getIdCliente());
+            for (DtoDatosPedido pedidos : datosPedidoBo.findDatosById(user, datosPedido)) {
+                if (!Objects.equals(idAnteriorPedido, pedidos.getIdPedido())) {
+                    DtoPedido pedido = PedidoFactory.newInstance(pedidos.getIdPedido());
+                    pedido.setCliente(object);
+                    pedido = pedidoBo.findById(user, pedido);
+                    DtoNotaVenta notaVenta = notaVentaBo.findByIdPedido(user, pedido);
+                    DtoMovimientos movimientos = MovimientosFactory.newInstance();
+                    movimientos.setNotaVenta(notaVenta);
+                    for (DtoMovimientos movs : movimientosBo.findAll(user, movimientos)) {
+                        movs.setNotaVenta(notaVentaBo.findById(user, movs.getNotaVenta()));
+                        movs.setCargos(cargosBo.findById(user, movs.getCargos()));
+                        movs.setAbonos(abonosDao.findById(movs.getAbonos()));
+                        movs.getAbonos().setBancos(bancosBo.findById(user, movs.getAbonos().getBancos()));
+                        movs.setCredito(creditoBo.findById(user, movs.getCredito()));
+                        collection.add(movs);
+                    }
+                    idAnteriorPedido = pedido.getIdPedido();
+                }
+            }
+            object.setMovimientos(collection);
+            return object.getMovimientos();
+        } else {
+            ApplicationMessages.errorMessage(PropertiesBean.getErrorFile().getProperty(Property.ACCESO_DENEGADO));
+            throw new ApplicationException(PropertiesBean.getErrorFile().getProperty(Property.ACCESO_DENEGADO));
+        }
+    }
+
+    @Override
+    public Collection<DtoMovimientos> findMovimientosReportByVendedor(DtoUsuario user, DtoVendedor object) {
+        if ((user != null) && (user.getIdUsuario() != 0)) {
+            Integer idAnteriorPedido = 0;
+            Collection<DtoMovimientos> collection = new ArrayList<>();
+            object = this.vendedorBo.findById(user, object);
+            DtoDatosPedido datosPedido = DatosPedidoFactory.newInstance();
+            datosPedido.setIdCliente(object.getIdVendedor());
+            for (DtoDatosPedido pedidos : datosPedidoBo.findDatosById(user, datosPedido)) {
+                if (!Objects.equals(idAnteriorPedido, pedidos.getIdPedido())) {
+                    DtoPedido pedido = PedidoFactory.newInstance(pedidos.getIdPedido());
+                    pedido.setVendedor(object);
+                    pedido = pedidoBo.findById(user, pedido);
+                    DtoNotaVenta notaVenta = notaVentaBo.findByIdPedido(user, pedido);
+                    DtoMovimientos movimientos = MovimientosFactory.newInstance();
+                    movimientos.setNotaVenta(notaVenta);
+                    for (DtoMovimientos movs : movimientosBo.findAll(user, movimientos)) {
+                        movs.setNotaVenta(notaVentaBo.findById(user, movs.getNotaVenta()));
+                        movs.setCargos(cargosBo.findById(user, movs.getCargos()));
+                        movs.setAbonos(abonosDao.findById(movs.getAbonos()));
+                        movs.getAbonos().setBancos(bancosBo.findById(user, movs.getAbonos().getBancos()));
+                        movs.setCredito(creditoBo.findById(user, movs.getCredito()));
+                        collection.add(movs);
+                    }
+                    idAnteriorPedido = pedido.getIdPedido();
+                }
+            }
+            object.setMovimientos(collection);
+            return object.getMovimientos();
         } else {
             ApplicationMessages.errorMessage(PropertiesBean.getErrorFile().getProperty(Property.ACCESO_DENEGADO));
             throw new ApplicationException(PropertiesBean.getErrorFile().getProperty(Property.ACCESO_DENEGADO));
@@ -344,6 +417,14 @@ public class AbonosBoImpl implements AbonosBo {
 
     public void setDevolucionesBo(DevolucionesBo devolucionesBo) {
         this.devolucionesBo = devolucionesBo;
+    }
+
+    public void setBancosBo(BancosBo bancosBo) {
+        this.bancosBo = bancosBo;
+    }
+
+    public void setCreditoBo(CreditoBo creditoBo) {
+        this.creditoBo = creditoBo;
     }
 
 }

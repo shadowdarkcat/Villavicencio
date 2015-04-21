@@ -19,4 +19,5 @@ public class Service {
     public static final String BANCOS_SERVICE = "bancosService";
     public static final String LIQUIDACION_SERVICE = "liquidacionService";
     public static final String CREDITO_SERVICE = "creditosService";
+    public static final String MOVIMIENTOS_SERVICE = "movimientosService";
 }

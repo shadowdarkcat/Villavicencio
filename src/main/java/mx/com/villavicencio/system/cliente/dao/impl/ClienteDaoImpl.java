@@ -20,7 +20,6 @@ import mx.com.villavicencio.system.cliente.dto.DtoCliente;
 import mx.com.villavicencio.system.cliente.factory.ClienteFactory;
 import mx.com.villavicencio.system.credito.credito.dto.DtoCredito;
 import mx.com.villavicencio.system.credito.credito.factory.CreditoFactory;
-import mx.com.villavicencio.system.usuario.dto.DtoUsuario;
 import mx.com.villavicencio.system.vendedor.dao.sql.sql.SqlVendedor;
 import mx.com.villavicencio.system.vendedor.dto.DtoVendedor;
 import mx.com.villavicencio.system.vendedor.factory.VendedorFactory;

@@ -29,6 +29,7 @@ public class DtoNotaVenta {
     private Collection<DtoMovimientos> movimientos;
     private DtoMovimientos movimiento;
     private Integer opcion;
+    private Collection<DtoNotaVenta> notasVenta;
 
     public Integer getIdNotaVenta() {
         return idNotaVenta;
@@ -156,5 +157,13 @@ public class DtoNotaVenta {
 
     public void setOpcion(Integer opcion) {
         this.opcion = opcion;
+    }
+
+    public Collection<DtoNotaVenta> getNotasVenta() {
+        return notasVenta;
+    }
+
+    public void setNotasVenta(Collection<DtoNotaVenta> notasVenta) {
+        this.notasVenta = notasVenta;
     }
 }

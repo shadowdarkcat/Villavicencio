@@ -1,25 +1,21 @@
 package mx.com.villavicencio.generics.report;
 
+import com.google.common.base.Objects;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.http.HttpServletResponse;
 import mx.com.villavicencio.commons.exception.ApplicationException;
 import mx.com.villavicencio.generics.variables.Variables;
-import mx.com.villavicencio.system.vendedor.dto.DtoVendedor;
-import mx.com.villavicencio.system.vendedor.factory.VendedorFactory;
+import mx.com.villavicencio.system.movimientos.movimientos.dto.DtoMovimientos;
+import mx.com.villavicencio.system.movimientos.movimientos.reporte.reporte.ReporteMovimientos;
 import mx.com.villavicencio.utils.StringUtils;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -34,9 +30,6 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.export.SimpleExporterInput;
 import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
 import net.sf.jasperreports.export.SimpleXlsxReportConfiguration;
-import org.apache.commons.beanutils.PropertyUtils;
-import org.reflections.ReflectionUtils;
-import static org.reflections.ReflectionUtils.withModifier;
 
 /**
  *
@@ -57,7 +50,8 @@ public abstract class GenericReport<U, D> extends GenericReportBoImpl<U, D> {
     @Override
     protected void createReporte(Collection collection, String rutaServer, String rutaReporte, String formato, HttpServletResponse response) {
         try {
-            File fileDestino = new File(rutaServer + File.separator + destino + ".pdf");
+            File fileDestino = new File(rutaServer + File.separator + destino + File.separator);
+
             if (!fileDestino.exists()) {
                 fileDestino.mkdirs();
             }
@@ -70,6 +64,9 @@ public abstract class GenericReport<U, D> extends GenericReportBoImpl<U, D> {
             parametrosReporte = new HashMap<>();
             parametrosReporte.put("PATH_IMAGENES", rutaServer + File.separator + "image" + File.separator);
             parametrosReporte.put("SUBREPORT_DIR", rutaReporte + File.separator);
+            if (ReporteMovimientos.getIsMovimientos()) {
+                parametrosReporte.put("SALDO_DISPONIBLE", ReporteMovimientos.getSaldoDisponible());
+            }
             JRBeanCollectionDataSource beanDataSource = new JRBeanCollectionDataSource(collection);
             reporteCompleto = JasperFillManager.fillReport(reporteCompilado, parametrosReporte, beanDataSource);
             this.viewReporte(formato, reporteCompleto, fileDestino, destino, response);
@@ -91,7 +88,7 @@ public abstract class GenericReport<U, D> extends GenericReportBoImpl<U, D> {
                 byte bytes[] = JasperExportManager.exportReportToPdf(jasperPrint);
 
                 if (fileDestino != null && destino != null) {
-                    report = new File(fileDestino, destino);
+                    report = new File(fileDestino, destino + ".pdf");
                     filePDF = new FileOutputStream(report);
                     filePDF.write(bytes);
                 }

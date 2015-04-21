@@ -154,6 +154,48 @@ public class ClienteBoImpl implements ClienteBo {
         }
     }
 
+    @Override
+    public DtoCliente findClienteReporteById(DtoUsuario user, DtoCliente object) {
+        if ((user.getIdUsuario() != 0) && (user != null)) {
+            object = this.clienteDao.findById(object);
+            object.setVendedor(this.vendedorBo.findById(user, object.getVendedor()));
+            Collection<DtoProducto> establecido = this.productoBo.findDatosProductoEstablecidoClienteById(user, object.getIdCliente());
+            Collection<DtoProducto> personalizado = this.productoBo.findDatosProductoPersonalizadoClienteById(user, object.getIdCliente());
+            if ((!establecido.isEmpty()) && (personalizado.isEmpty())) {
+                object.setEstablecidos(establecido);
+            } else if ((!personalizado.isEmpty()) && (establecido.isEmpty())) {
+                object.setPersonalizados(personalizado);
+            } else if ((!establecido.isEmpty()) && (!personalizado.isEmpty())) {
+                object.setPersonalizados(personalizado);
+            }
+            DtoCredito findCreditoByIdCliente = this.creditoBo.findCreditoByIdCliente(user, object.getCredito(), object.getIdCliente());
+            if ((findCreditoByIdCliente != null) && (findCreditoByIdCliente.getIdCredito() != null)) {
+                object.setCredito(findCreditoByIdCliente);
+            }
+            return object;
+        } else {
+            ApplicationMessages.errorMessage(PropertiesBean.getErrorFile().getProperty(Property.ACCESO_DENEGADO));
+            throw new ApplicationException(PropertiesBean.getErrorFile().getProperty(Property.ACCESO_DENEGADO));
+        }
+    }
+
+    @Override
+    public Collection<DtoCliente> findAllClienteReporte(DtoUsuario user) {
+        if ((user.getIdUsuario() != 0) && (user != null)) {
+            Collection<DtoCliente> collection = new ArrayList<>();
+            for (DtoCliente clientes : this.clienteDao.findAll()) {
+                clientes.setVendedor(this.vendedorBo.findById(user, clientes.getVendedor()));
+                clientes.setEstablecidos(this.productoBo.findDatosProductoEstablecidoClienteById(user, clientes.getIdCliente()));
+                clientes.setPersonalizados(this.productoBo.findDatosProductoPersonalizadoClienteById(user, clientes.getIdCliente()));
+                collection.add(clientes);
+            }
+            return collection;
+        } else {
+            ApplicationMessages.errorMessage(PropertiesBean.getErrorFile().getProperty(Property.ACCESO_DENEGADO));
+            throw new ApplicationException(PropertiesBean.getErrorFile().getProperty(Property.ACCESO_DENEGADO));
+        }
+    }
+
     private void insertDatosProductos(DtoUsuario user, DtoCliente object) {
         if (object.getEstablecidos() != null) {
             for (DtoProducto establecidos : object.getEstablecidos()) {

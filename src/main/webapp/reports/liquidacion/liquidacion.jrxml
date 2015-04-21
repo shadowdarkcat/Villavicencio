@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="notaVenta" pageWidth="892" pageHeight="842" whenNoDataType="NoDataSection" columnWidth="852" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d301ebb1-7ecb-4a64-8a8c-5112bf481a91">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="PATH_IMAGENES" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="idNotaVenta" class="java.lang.Integer">
+		<fieldDescription><![CDATA[idNotaVenta]]></fieldDescription>
+	</field>
+	<field name="statusNotaVenta" class="java.lang.Character">
+		<fieldDescription><![CDATA[statusNotaVenta]]></fieldDescription>
+	</field>
+	<field name="fecha" class="java.util.Date">
+		<fieldDescription><![CDATA[fecha]]></fieldDescription>
+	</field>
+	<field name="folio" class="java.lang.String">
+		<fieldDescription><![CDATA[folio]]></fieldDescription>
+	</field>
+	<field name="nombreCliente" class="java.lang.String">
+		<fieldDescription><![CDATA[nombreCliente]]></fieldDescription>
+	</field>
+	<field name="direccion" class="java.lang.String">
+		<fieldDescription><![CDATA[direccion]]></fieldDescription>
+	</field>
+	<field name="observaciones" class="java.lang.String">
+		<fieldDescription><![CDATA[observaciones]]></fieldDescription>
+	</field>
+	<field name="rfc" class="java.lang.String">
+		<fieldDescription><![CDATA[rfc]]></fieldDescription>
+	</field>
+	<field name="total" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[total]]></fieldDescription>
+	</field>
+	<field name="cantidadLetra" class="java.lang.String">
+		<fieldDescription><![CDATA[cantidadLetra]]></fieldDescription>
+	</field>
+	<field name="detalles" class="java.util.Collection">
+		<fieldDescription><![CDATA[detalles]]></fieldDescription>
+	</field>
+	<columnHeader>
+		<band height="220" splitType="Stretch">
+			<staticText>
+				<reportElement x="580" y="50" width="80" height="20" uuid="968995d5-116c-40c0-8f0e-9e6b9867d3bc"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle"/>
+				<text><![CDATA[Estado Nota:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="852" height="30" uuid="a442e5f0-e525-48ed-baa3-884f68cee217"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[REPORTE NOTA(S) VENTA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="135" width="70" height="20" uuid="65d73025-5983-4c57-a748-6c061c7f88d0"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle"/>
+				<text><![CDATA[CLIENTE:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="580" y="30" width="80" height="20" uuid="f948284d-f9de-472e-8162-a434289f6e32"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle"/>
+				<text><![CDATA[No Nota:]]></text>
+			</staticText>
+			<image>
+				<reportElement x="0" y="0" width="80" height="79" uuid="c18192b5-4bdb-468c-b2d4-b7881a1653a0"/>
+				<imageExpression><![CDATA[$P{PATH_IMAGENES} + "logo.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="0" y="115" width="70" height="20" uuid="dee6ed18-36ac-4afa-8ee5-26052ffcb856"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle"/>
+				<text><![CDATA[FOLIO:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="155" width="70" height="20" uuid="3443dacb-d392-4ecb-9b08-5c53a91b0902"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle"/>
+				<text><![CDATA[DIRECCIÓN:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="95" width="70" height="20" uuid="6055aab5-dfbf-42d9-97ac-3d4c013f7dff"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle"/>
+				<text><![CDATA[FECHA:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="200" width="70" height="20" uuid="4087c0ed-de06-47f4-84e3-a9c0191c2ab6"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle"/>
+				<text><![CDATA[RFC:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="660" y="30" width="192" height="20" uuid="b1fbb08d-41ca-4b16-94ee-54db3ed0b082"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{idNotaVenta}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="660" y="50" width="192" height="20" uuid="259c84b4-66a7-41c2-8e65-979cbaf036d4"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{statusNotaVenta}.toString().equals("P")
+	? "PENDIENTE"
+	: (
+		$F{statusNotaVenta}.toString().equals("S")
+		? "SURTIENDO"
+		: (
+			$F{statusNotaVenta}.toString().equals("E")
+			? "ENTREGADO"
+			: (
+				$F{statusNotaVenta}.toString().equals("C")
+				? "CANCELADO"
+				: ""
+			)
+		)
+	)]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="70" y="95" width="143" height="20" uuid="07f8c1d6-b78a-4479-a481-378ff7e8fbc3"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="70" y="115" width="143" height="20" uuid="1fd982c1-5408-4bda-aef9-1a935a9ce054"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{folio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="70" y="135" width="782" height="20" uuid="16f110fe-ae4e-4c80-9486-1141abe451f2"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{nombreCliente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="70" y="155" width="782" height="45" uuid="6dbf7eb4-878f-461f-9021-0c86c11e0330"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{direccion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="70" y="200" width="782" height="20" uuid="63e77373-c59f-422f-a4dd-0e419d52e8f8"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{rfc} != null
+    ? $F{rfc}
+    : "NO APLICA"]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField evaluationTime="Report">
+				<reportElement x="827" y="0" width="25" height="20" uuid="3929935a-d305-48f3-9177-97c92e9d79ae"/>
+				<textElement textAlignment="Center">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="812" y="0" width="15" height="20" uuid="b8e7d771-4a35-4d97-b612-8c530144351f"/>
+				<textElement textAlignment="Center">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[de]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="787" y="0" width="25" height="20" uuid="f489ec62-9cea-4d12-ad82-6295b9cdefbb"/>
+				<textElement textAlignment="Center">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="752" y="0" width="35" height="20" uuid="bd515f5a-06ca-4725-9b96-3f6032fb3b57"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Pagina]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="11">
+			<subreport>
+				<reportElement x="0" y="0" width="852" height="11" uuid="693f502b-a3a4-44d1-b71e-aa9e869e0d74"/>
+				<subreportParameter name="total">
+					<subreportParameterExpression><![CDATA[$F{total}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="cantidadLetra">
+					<subreportParameterExpression><![CDATA[$F{cantidadLetra}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="observaciones">
+					<subreportParameterExpression><![CDATA[$F{observaciones}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="PATH_IMAGENES">
+					<subreportParameterExpression><![CDATA[$P{PATH_IMAGENES}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{detalles})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "detalleNotaVenta.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</summary>
+</jasperReport>

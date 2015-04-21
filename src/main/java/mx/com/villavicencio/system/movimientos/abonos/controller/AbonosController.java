@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Collection;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -32,6 +33,8 @@ import mx.com.villavicencio.system.movimientos.abonos.factory.AbonosFactory;
 import mx.com.villavicencio.system.movimientos.bancos.bo.BancosBo;
 import mx.com.villavicencio.system.movimientos.bancos.dto.DtoBancos;
 import mx.com.villavicencio.system.movimientos.bancos.factory.BancosFactory;
+import mx.com.villavicencio.system.movimientos.movimientos.dto.DtoMovimientos;
+import mx.com.villavicencio.system.movimientos.movimientos.reporte.factory.ReporteFactoryMovimientos;
 import mx.com.villavicencio.system.usuario.dto.DtoUsuario;
 import mx.com.villavicencio.system.vendedor.dto.DtoVendedor;
 import mx.com.villavicencio.system.vendedor.factory.VendedorFactory;
@@ -57,13 +60,15 @@ public class AbonosController extends HttpServlet {
     private NotaVentaBo notaVentaBo;
     private BancosBo bancosBo;
     private Gson gson;
-
+    private String rutaServer;
+    private String rutaReporte;
     private RequestDispatcher dispatcher;
 
     private static final int INIT_ABONOS = 0;
     private static final int GET_JSON_DETALLES = 1;
     private static final int GET_JSON_DETALLES_ABONOS = 2;
     private static final int INSERT_ABONO = 3;
+    private static final int GET_REPORTE_MOVIMIENTOS = 4;
 
     @Override
     public void init() throws ServletException {
@@ -143,6 +148,56 @@ public class AbonosController extends HttpServlet {
                     out = response.getWriter();
                     out.print(gson.toJson(Boolean.TRUE));
                     break;
+
+                case GET_REPORTE_MOVIMIENTOS:
+                    Collection<DtoMovimientos> findMovimientosReport = null;
+                    if (!StringUtils.isReallyEmptyOrNull(request.getParameter(Text.ID_CLIENTE))) {
+                        cliente = ClienteFactory.newInstance(request.getParameter(Text.ID_CLIENTE));
+                        if ((cliente.getIdCliente() != null) && (cliente.getIdCliente() != 0)) {
+                            findMovimientosReport = this.abonosBo.findMovimientosReportByCliente(user, cliente);
+                            rutaServer = getServletContext().getRealPath("/");
+                            rutaReporte = getServletContext().getRealPath("/reports/"
+                                    + request.getParameter(Variables.NOMBRE_REPORTE) + "/");
+                            ReporteFactoryMovimientos.newInstance().generarReporte(user, findMovimientosReport, rutaServer,
+                                    rutaReporte, Variables.PDF, response);
+                        }
+                    } else if (!StringUtils.isReallyEmptyOrNull(request.getParameter(Text.ID_VENDEDOR))) {
+                        vendedor = VendedorFactory.newInstance(request.getParameter(Text.ID_VENDEDOR));
+                        findMovimientosReport = this.abonosBo.findMovimientosReportByVendedor(user, vendedor);
+                        rutaServer = getServletContext().getRealPath("/");
+                        rutaReporte = getServletContext().getRealPath("/reports/"
+                                + request.getParameter(Variables.NOMBRE_REPORTE) + "/");
+                        ReporteFactoryMovimientos.newInstance().generarReporte(user, findMovimientosReport, rutaServer,
+                                rutaReporte, Variables.PDF, response);
+                    } else {
+                        for (DtoCliente findAll : abonosBo.findAllClientes(user)) {
+                            cliente = ClienteFactory.newInstance(findAll.getIdCliente());
+                            findMovimientosReport.addAll(this.abonosBo.findMovimientosReportByCliente(user, cliente));
+
+                        }
+                        for (DtoVendedor findAll : abonosBo.findAllVendedores(user)) {
+                            cliente = ClienteFactory.newInstance(findAll.getIdVendedor());
+                            findMovimientosReport.addAll(this.abonosBo.findMovimientosReportByCliente(user, cliente));
+                        }
+                        rutaServer = getServletContext().getRealPath("/");
+                        rutaReporte = getServletContext().getRealPath("/reports/"
+                                + request.getParameter(Variables.NOMBRE_REPORTE) + "/");
+                        if (!StringUtils.isReallyEmptyOrNull(request.getParameter(Text.FORMATO_REPORTE))) {
+                            if (!StringUtils.isReallyEmptyOrNull(request.getParameter(Text.FORMATO_REPORTE))) {
+                                switch (request.getParameter(Text.FORMATO_REPORTE)) {
+                                    case Variables.PDF:
+                                        ReporteFactoryMovimientos.newInstance().generarReporte(user, findMovimientosReport, rutaServer,
+                                                rutaReporte, Variables.PDF, response);
+                                        break;
+                                    case Variables.EXCEL:
+                                        ReporteFactoryMovimientos.newInstance().generarReporte(user, findMovimientosReport, rutaServer, rutaReporte, Variables.EXCEL, response);
+                                        break;
+                                }
+                            }
+                        }
+                    }
+                    break;
+
                 default:
                     Exception ex = MessageException.messageException(PropertiesBean.getErrorFile().getProperty(Property.ACCESO_DENEGADO), PropertiesBean.getErrorFile().getProperty(Property.OPCION_INVALIDA));
                     dispatcher = getServletContext().getRequestDispatcher(Dispatcher.HANDLER_EXCEPTION);

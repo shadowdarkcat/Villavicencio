@@ -63,10 +63,10 @@
                                                         </c:if>
                                                     </td>
                                                     <td style="text-align: center">
-                                                        <a href="${pageContext.request.contextPath}/controller/clienteController?method=6&txtIdCliente=${clientes.idCliente}"
+                                                        <a href="${pageContext.request.contextPath}/controller/abonosController?method=4&txtIdCliente=${clientes.idCliente}&reportName=movimientos"
                                                            target="_blank">
                                                             <img src="${pageContext.request.contextPath}/image/report.png" width="32" height="32"
-                                                                 title="Ver Detalle" name="detalleCliente" style="image-orientation: left;"/>
+                                                                 title="Ver Detalle Movimientos" name="detalleCliente" style="image-orientation: left;"/>
                                                         </a>
                                                     </td>                                                    
                                                     <td>
@@ -108,11 +108,11 @@
                                                         ${vendedores.nombre}  ${vendedores.apellidoPaterno}  ${vendedores.apellidoMaterno}
                                                     </td>
                                                     <td style="text-align: center">
-                                                        <a href="${pageContext.request.contextPath}/controller/vendedorController?method=6&txtIdVendedor=${vendedores.idVendedor}"
+                                                        <a href="${pageContext.request.contextPath}/controller/abonosController?method=4&txtIdVendedor=${vendedores.idVendedor}&reportName=movimientos"
                                                            target="_blank">
                                                             <img src="${pageContext.request.contextPath}/image/report.png" width="32" height="32"
-                                                                 title="Ver Detalle" name="detalleVendedor" style="image-orientation: left;"/>
-                                                        </a>
+                                                                 title="Ver Detalle Movimientos" name="detalleCliente" style="image-orientation: left;"/>
+                                                        </a>         
                                                     </td>                                                        
                                                     <td>
                                                         <c:if test="${vendedores.externo == true}">
